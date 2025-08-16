@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-23a8161f444f6f1cd0bf.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "cfd_upgrade_app",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "cfd_upgrade_app::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cfd_upgrade_app-Debug-1dfd9500f3a155451b0a.json",
+					"name" : "cfd_upgrade_app",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "cfd_upgrade_app_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cfd_upgrade_app_autogen-Debug-60c25abaf0a9d2a98dbf.json",
+					"name" : "cfd_upgrade_app_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "cfd_upgrade_app_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-cfd_upgrade_app_autogen_timestamp_deps-Debug-f5b31e72d044d9ab4809.json",
+					"name" : "cfd_upgrade_app_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_2_MinGW_32_bit-Debug",
+		"source" : "E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
