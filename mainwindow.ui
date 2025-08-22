@@ -502,7 +502,7 @@ border-radius:10px;</string>
        <string>电压</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_11">
+     <widget class="QLineEdit" name="lEdit_voltage">
       <property name="geometry">
        <rect>
         <x>50</x>
@@ -525,7 +525,7 @@ border-radius:10px;</string>
        <string>电流</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_12">
+     <widget class="QLineEdit" name="lEdit_current">
       <property name="geometry">
        <rect>
         <x>50</x>
@@ -548,7 +548,7 @@ border-radius:10px;</string>
        <string>内阻</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_13">
+     <widget class="QLineEdit" name="lEdit_res">
       <property name="geometry">
        <rect>
         <x>50</x>
@@ -571,7 +571,7 @@ border-radius:10px;</string>
        <string>充放电轮次</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_14">
+     <widget class="QLineEdit" name="lEdit_cycle">
       <property name="geometry">
        <rect>
         <x>80</x>
@@ -594,7 +594,7 @@ border-radius:10px;</string>
        <string>充放电状态</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_15">
+     <widget class="QLineEdit" name="lEdit_cfdzt">
       <property name="geometry">
        <rect>
         <x>80</x>
@@ -617,11 +617,126 @@ border-radius:10px;</string>
        <string>电池温度</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_16">
+     <widget class="QLineEdit" name="lEdit_battery_temperature">
       <property name="geometry">
        <rect>
         <x>80</x>
         <y>200</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_46">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>240</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>一氧化碳浓度</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lEdit_CO">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>240</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_47">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>270</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>氢气浓度</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lEdit_H2">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>270</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_48">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>300</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>烟雾状态</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lEdit_SMK">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>300</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_49">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>330</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>环境温度</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lEdit_env_temperature">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>330</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_50">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>360</y>
+        <width>71</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>环境湿度</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lEdit_humidity">
+      <property name="geometry">
+       <rect>
+        <x>100</x>
+        <y>360</y>
         <width>71</width>
         <height>21</height>
        </rect>
@@ -632,12 +747,12 @@ border-radius:10px;</string>
      <attribute name="title">
       <string>软件版本信息</string>
      </attribute>
-     <widget class="QLineEdit" name="lineEdit_6">
+     <widget class="QLineEdit" name="lEdit_inference_version">
       <property name="geometry">
        <rect>
         <x>160</x>
         <y>30</y>
-        <width>71</width>
+        <width>171</width>
         <height>21</height>
        </rect>
       </property>
@@ -671,17 +786,134 @@ border-radius:10px;</string>
        <string>电池健康推理软件软件版本</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_5">
+     <widget class="QLineEdit" name="lEdit_collect_version">
       <property name="geometry">
        <rect>
         <x>160</x>
         <y>10</y>
-        <width>71</width>
+        <width>171</width>
         <height>21</height>
        </rect>
       </property>
       <property name="readOnly">
        <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_41">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>设备编号</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lEdit_device_serial">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>60</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_42">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>110</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>设备MAC地址</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lEdit_mac">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>110</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_43">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>设备Modbus地址</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lEdit_modbus_addr">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>150</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_44">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>190</y>
+        <width>151</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>电池额定容量</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lEdit_capacity">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>190</y>
+        <width>141</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btn_getInfo">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>20</y>
+        <width>75</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>获取</string>
       </property>
      </widget>
     </widget>
@@ -764,11 +996,218 @@ border-radius:10px;</string>
        <string>下载</string>
       </property>
      </widget>
+     <widget class="QLabel" name="label_45">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>250</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>软件升级标志</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>250</y>
+        <width>69</width>
+        <height>22</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
       <string>阈值设置</string>
      </attribute>
+     <widget class="QLineEdit" name="lineEdit_17">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>10</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_33">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>氢气报警阈值</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_34">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>一氧化碳报警阈值</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_35">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>70</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>温度报警阈值</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_36">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>100</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>温升率报警阈值</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_37">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>140</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>电压报警高阈值</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_38">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>170</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>电压报警低阈值</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_39">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>200</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>放电电流报警阈值</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_40">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>240</y>
+        <width>101</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>充电电流报警阈值</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_18">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>40</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_19">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>70</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_20">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>100</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_21">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>130</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_22">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>170</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_23">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>200</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_24">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>240</y>
+        <width>113</width>
+        <height>21</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox">
@@ -887,6 +1326,29 @@ border-radius:10px;</string>
       <string>SOH</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QComboBox" name="cbox_modbus_addr">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>90</y>
+      <width>69</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_net_init">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>90</y>
+      <width>75</width>
+      <height>23</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>设备获取</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

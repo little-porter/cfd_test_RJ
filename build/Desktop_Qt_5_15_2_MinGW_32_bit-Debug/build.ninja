@@ -73,6 +73,22 @@ build CMakeFiles/cfd_upgrade_app.dir/mainwindow.cpp.obj: CXX_COMPILER__cfd_upgra
   OBJECT_DIR = CMakeFiles\cfd_upgrade_app.dir
   OBJECT_FILE_DIR = CMakeFiles\cfd_upgrade_app.dir
 
+build CMakeFiles/cfd_upgrade_app.dir/upgrade.cpp.obj: CXX_COMPILER__cfd_upgrade_app_unscanned_Debug E$:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/upgrade.cpp || cmake_object_order_depends_target_cfd_upgrade_app
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\cfd_upgrade_app.dir\upgrade.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IE:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_2_MinGW_32_bit-Debug/cfd_upgrade_app_autogen/include -isystem D:/Qt/5.15.2/mingw81_32/include -isystem D:/Qt/5.15.2/mingw81_32/include/QtWidgets -isystem D:/Qt/5.15.2/mingw81_32/include/QtGui -isystem D:/Qt/5.15.2/mingw81_32/include/QtANGLE -isystem D:/Qt/5.15.2/mingw81_32/include/QtCore -isystem D:/Qt/5.15.2/mingw81_32/./mkspecs/win32-g++ -isystem D:/Qt/5.15.2/mingw81_32/include/QtSerialPort
+  OBJECT_DIR = CMakeFiles\cfd_upgrade_app.dir
+  OBJECT_FILE_DIR = CMakeFiles\cfd_upgrade_app.dir
+
+build CMakeFiles/cfd_upgrade_app.dir/myserialport.cpp.obj: CXX_COMPILER__cfd_upgrade_app_unscanned_Debug E$:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/myserialport.cpp || cmake_object_order_depends_target_cfd_upgrade_app
+  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SERIALPORT_LIB -DQT_WIDGETS_LIB
+  DEP_FILE = CMakeFiles\cfd_upgrade_app.dir\myserialport.cpp.obj.d
+  FLAGS = -DQT_QML_DEBUG -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IE:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_2_MinGW_32_bit-Debug/cfd_upgrade_app_autogen/include -isystem D:/Qt/5.15.2/mingw81_32/include -isystem D:/Qt/5.15.2/mingw81_32/include/QtWidgets -isystem D:/Qt/5.15.2/mingw81_32/include/QtGui -isystem D:/Qt/5.15.2/mingw81_32/include/QtANGLE -isystem D:/Qt/5.15.2/mingw81_32/include/QtCore -isystem D:/Qt/5.15.2/mingw81_32/./mkspecs/win32-g++ -isystem D:/Qt/5.15.2/mingw81_32/include/QtSerialPort
+  OBJECT_DIR = CMakeFiles\cfd_upgrade_app.dir
+  OBJECT_FILE_DIR = CMakeFiles\cfd_upgrade_app.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target cfd_upgrade_app
@@ -81,7 +97,7 @@ build CMakeFiles/cfd_upgrade_app.dir/mainwindow.cpp.obj: CXX_COMPILER__cfd_upgra
 #############################################
 # Link the executable cfd_upgrade_app.exe
 
-build cfd_upgrade_app.exe: CXX_EXECUTABLE_LINKER__cfd_upgrade_app_Debug CMakeFiles/cfd_upgrade_app.dir/cfd_upgrade_app_autogen/mocs_compilation.cpp.obj CMakeFiles/cfd_upgrade_app.dir/main.cpp.obj CMakeFiles/cfd_upgrade_app.dir/mainwindow.cpp.obj | D$:/Qt/5.15.2/mingw81_32/lib/libQt5Widgets.a D$:/Qt/5.15.2/mingw81_32/lib/libQt5SerialPort.a D$:/Qt/5.15.2/mingw81_32/lib/libQt5Gui.a D$:/Qt/5.15.2/mingw81_32/lib/libQt5Core.a D$:/Qt/5.15.2/mingw81_32/lib/libqtmain.a || cfd_upgrade_app_autogen cfd_upgrade_app_autogen_timestamp_deps
+build cfd_upgrade_app.exe: CXX_EXECUTABLE_LINKER__cfd_upgrade_app_Debug CMakeFiles/cfd_upgrade_app.dir/cfd_upgrade_app_autogen/mocs_compilation.cpp.obj CMakeFiles/cfd_upgrade_app.dir/main.cpp.obj CMakeFiles/cfd_upgrade_app.dir/mainwindow.cpp.obj CMakeFiles/cfd_upgrade_app.dir/upgrade.cpp.obj CMakeFiles/cfd_upgrade_app.dir/myserialport.cpp.obj | D$:/Qt/5.15.2/mingw81_32/lib/libQt5Widgets.a D$:/Qt/5.15.2/mingw81_32/lib/libQt5SerialPort.a D$:/Qt/5.15.2/mingw81_32/lib/libQt5Gui.a D$:/Qt/5.15.2/mingw81_32/lib/libQt5Core.a D$:/Qt/5.15.2/mingw81_32/lib/libqtmain.a || cfd_upgrade_app_autogen cfd_upgrade_app_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g
   LINK_FLAGS = -mwindows
   LINK_LIBRARIES = D:/Qt/5.15.2/mingw81_32/lib/libQt5Widgets.a  D:/Qt/5.15.2/mingw81_32/lib/libQt5SerialPort.a  D:/Qt/5.15.2/mingw81_32/lib/libQt5Gui.a  D:/Qt/5.15.2/mingw81_32/lib/libQt5Core.a  D:/Qt/5.15.2/mingw81_32/lib/libqtmain.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32

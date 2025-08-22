@@ -39,6 +39,8 @@ else()
     else()
         add_executable(cfd_upgrade_app
             ${PROJECT_SOURCES}
+            upgrade.h upgrade.cpp
+            myserialport.h myserialport.cpp
         )
     endif()
 endif()

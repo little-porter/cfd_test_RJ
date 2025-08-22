@@ -86,6 +86,18 @@
 			"MU",
 			"EWIEGA46WW/moc_mainwindow.cpp",
 			null
+		],
+		[
+			"E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/myserialport.h",
+			"MU",
+			"EWIEGA46WW/moc_myserialport.cpp",
+			null
+		],
+		[
+			"E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/upgrade.h",
+			"MU",
+			"EWIEGA46WW/moc_upgrade.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -147,6 +159,16 @@
 		],
 		[
 			"E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/mainwindow.cpp",
+			"MU",
+			null
+		],
+		[
+			"E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/myserialport.cpp",
+			"MU",
+			null
+		],
+		[
+			"E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/upgrade.cpp",
 			"MU",
 			null
 		]

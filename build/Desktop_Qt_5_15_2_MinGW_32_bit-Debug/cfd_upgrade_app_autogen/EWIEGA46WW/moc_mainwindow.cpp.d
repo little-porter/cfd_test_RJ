@@ -1,11 +1,16 @@
 E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_2_MinGW_32_bit-Debug/cfd_upgrade_app_autogen/EWIEGA46WW/moc_mainwindow.cpp: E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/mainwindow.h \
   E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_2_MinGW_32_bit-Debug/cfd_upgrade_app_autogen/moc_predefs.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/QDebug \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/QElapsedTimer \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/QObject \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/QThread \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/QTimer \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qalgorithms.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qarraydata.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qatomic.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qatomic_cxx11.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qbasicatomic.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qbasictimer.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qbytearray.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qbytearraylist.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qchar.h \
@@ -13,7 +18,10 @@ E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qconfig.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qcontainerfwd.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qcontainertools_impl.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qcontiguouscache.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qdatastream.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qdeadlinetimer.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qdebug.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qelapsedtimer.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qflags.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qgenericatomic.h \
@@ -25,7 +33,9 @@ E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qiterator.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qline.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qlist.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qlocale.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qlogging.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qmap.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qmargins.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qmetatype.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qnamespace.h \
@@ -41,6 +51,7 @@ E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qrefcount.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qregexp.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qscopedpointer.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qset.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qshareddata.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qsharedpointer.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qsharedpointer_impl.h \
@@ -54,7 +65,11 @@ E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qsysinfo.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qsystemdetection.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qtcore-config.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qtextstream.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qthread.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qtimer.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qtypeinfo.h \
+  D:/Qt/5.15.2/mingw81_32/include/QtCore/qvariant.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qvarlengtharray.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qvector.h \
   D:/Qt/5.15.2/mingw81_32/include/QtCore/qversiontagging.h \
@@ -229,6 +244,7 @@ E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_
   D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/ext/string_conversions.h \
   D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/ext/type_traits.h \
   D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/functional \
+  D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/future \
   D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/i686-w64-mingw32/bits/atomic_word.h \
   D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/i686-w64-mingw32/bits/c++allocator.h \
   D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/i686-w64-mingw32/bits/c++config.h \
@@ -265,4 +281,5 @@ E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_
   D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/c++/vector \
   D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/stdarg.h \
   D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/stddef.h \
-  D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/stdint.h
+  D:/Qt/Tools/mingw810_32/lib/gcc/i686-w64-mingw32/8.1.0/include/stdint.h \
+  E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/myserialport.h
