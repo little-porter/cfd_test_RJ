@@ -148,16 +148,21 @@ void myserialport::myserialport_send_task(void)
 
 void myserialport::myserialport_receive_handler(void)
 {
+    if(!serialPort->bytesAvailable()) return;
+
     QByteArray data = serialPort->readAll();
+
     receiveBuffer.append(data);
     // m_idle_timer->start();
-    if (receiveBuffer.isEmpty()) {
+    if (receiveBuffer.isEmpty() || receiveBuffer.length() < 4) {
         // 理论上不应该发生，但安全起见
         return;
     }
-    if(receiveBuffer.length() < (receiveBuffer[2]<<8|receiveBuffer[3])){
-        // m_idle_timer->start();
-        return;
+    if(receiveBuffer[1] == 0x03 || receiveBuffer[1] == 0x04){
+        if(receiveBuffer.length() < (receiveBuffer[2]<<8|receiveBuffer[3] + 6)){
+            // m_idle_timer->start();
+            return;
+        }
     }
 
 
@@ -176,30 +181,30 @@ void myserialport::myserialport_receive_handler(void)
     receiveBuffer.clear();
 }
 
-void myserialport::myserialport_receive_data_deal(void)
-{
-    // m_idle_timer->stop();
-    if (receiveBuffer.isEmpty()) {
-        // 理论上不应该发生，但安全起见
-        return;
-    }
-    if(receiveBuffer.length() < (receiveBuffer[2]<<8|receiveBuffer[3])){
-        // m_idle_timer->start();
-        return;
-    }
+// void myserialport::myserialport_receive_data_deal(void)
+// {
+//     // m_idle_timer->stop();
+//     if (receiveBuffer.isEmpty()) {
+//         // 理论上不应该发生，但安全起见
+//         return;
+//     }
+//     if(receiveBuffer.length() < (receiveBuffer[2]<<8|receiveBuffer[3])){
+//         // m_idle_timer->start();
+//         return;
+//     }
 
 
-    quint16 read_size = 0;
-    if(receiveBuffer.length() > MYSERIALPORT_DATA_MAXSIZE){
-        read_size = MYSERIALPORT_DATA_MAXSIZE;
-    }else{
-        read_size = receiveBuffer.length();
-    }
+//     quint16 read_size = 0;
+//     if(receiveBuffer.length() > MYSERIALPORT_DATA_MAXSIZE){
+//         read_size = MYSERIALPORT_DATA_MAXSIZE;
+//     }else{
+//         read_size = receiveBuffer.length();
+//     }
 
-    memcpy(rx_fifo.fifo[rx_fifo.tail].data,receiveBuffer.data(),read_size);
-    rx_fifo.fifo[rx_fifo.tail].length = read_size;
-    rx_fifo.tail++;
-    rx_fifo.tail %= MYSERIALPORT_FIFO_SIZE;
+//     memcpy(rx_fifo.fifo[rx_fifo.tail].data,receiveBuffer.data(),read_size);
+//     rx_fifo.fifo[rx_fifo.tail].length = read_size;
+//     rx_fifo.tail++;
+//     rx_fifo.tail %= MYSERIALPORT_FIFO_SIZE;
 
-    receiveBuffer.clear();
-}
+//     receiveBuffer.clear();
+// }

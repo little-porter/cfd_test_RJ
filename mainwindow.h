@@ -36,7 +36,18 @@ QT_END_NAMESPACE
 #define PROJECT_EVENT_GET_INFO_BIT  1<<1
 #define PROJECT_EVENT_UPGRADE_BIT   1<<2
 #define PROJECT_EVENT_SET_PRAMA_BIT 1<<3
+#define PROJECT_EVENT_GET_PRAMA_BIT 1<<4
 
+#define PARAM_EVENT_SET_ALARM_THRESHOLD 1<<0
+#define PARAM_EVENT_SET_SERIAL          1<<1
+#define PARAM_EVENT_SET_TIME            1<<2
+#define PARAM_EVENT_SET_CURRENT         1<<3
+#define PARAM_EVENT_SET_CAPACITY        1<<4
+
+#define PARAM_EVENT_SET_BALANCE         1<<5
+#define PARAM_EVENT_SET_VOLTAGE_CALIB   1<<6
+#define PARAM_EVENT_SET_CO_CALIB        1<<7
+#define PARAM_EVENT_SET_H2_CALIB        1<<8
 
 class MainWindow : public QMainWindow
 {
@@ -49,7 +60,7 @@ private slots:
     void onChooseFile(void);
     void onOpenSerialPort(void);
     void onCloseSerialPort(void);
-    void onSendData(void);
+
     void readSerialData(void);
     void populatePorts(void);
 
@@ -58,6 +69,28 @@ private slots:
     // void net_init(void);
 
     void on_btn_net_init_clicked();
+    void on_downloadButton_clicked();
+
+    void on_btn_threshold_set_clicked();
+
+    void on_btn_serial_set_clicked();
+
+    void on_btn_time_set_clicked();
+
+    void on_btn_capacity_set_clicked();
+
+    void on_btn_current_set_clicked();
+
+    void on_btn_balanced_clicked();
+
+    void on_btn_voltage_calib_set_clicked();
+
+    void on_btn_voltage_calib_get_clicked();
+
+    void on_btn_co_calib_set_clicked();
+
+    void on_btn_h2_calib_set_clicked();
+
 private:
     typedef enum _run_process{
         RUN_PROCESS_INIT = 0,
@@ -65,24 +98,47 @@ private:
         RUN_PROCESS_GET_DATA,
         RUN_PROCESS_UPGRADE,
         RUN_PROCESS_SET_PARAM,
+        RUN_PROCESS_GET_PARAM,
     }run_process_t;
 
     typedef quint32 project_event_t;
+
+    typedef union _u8_float
+    {
+        float f_data;
+        quint8 u8_data[4];
+    }u8_float_t;
 private:
     void project_event_handler(void);
 
-
+    void upgrade_handler(void);
 private:
     // void populatePorts();
     bool sendChunk(const QByteArray &data); // 新增：发送数据块的函数
     bool upgrade_start(const char *data,quint16 len,quint16 frm_num,ota_upgrade_flag_t flag);
 
+    void device_config_info_get(void);
+    void device_version_mac_info_get(void);
+
     void comm_timer_run_task(void);
     void run_process_init_handler(void);
     void run_process_get_info_handler(void);
+    void run_process_get_result_handler(void);
     void run_process_get_data_handler(void);
     void run_process_upgrade_handler(void);
-    void run_process_set_prama_handler(void);
+    void run_process_set_param_handler(void);
+    void run_process_get_param_handler(void);
+
+    void device_alarm_threshold_set(void);
+    void device_serial_set(void);
+    void device_time_set(void);
+    void device_capacity_set(void);
+    void device_current_set(void);
+    void device_balance_set(void);
+    void device_voltage_calibration_set(void);
+    void device_co_calibration_set(void);
+    void device_h2_calibration_set(void);
+
 private:
     Ui::MainWindow *ui;
     QSerialPort    *serialPort;
@@ -97,6 +153,8 @@ private:
     std::list<quint16> modbusAddrList;
     run_process_t   m_run_process;
     project_event_t m_run_event;
+    project_event_t m_param_event;
 
+    quint8 m_balance_flag;
 };
 #endif // MAINWINDOW_H

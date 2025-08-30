@@ -1,0 +1,11 @@
+# ninja log v5
+3	501	7780732542263814	cfd_upgrade_app_autogen/timestamp	e7f8185ce47a51c8
+3	501	7780732542263814	cfd_upgrade_app_autogen/mocs_compilation.cpp	e7f8185ce47a51c8
+3	501	7780732542263814	E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_2_MinGW_32_bit-Release/cfd_upgrade_app_autogen/timestamp	e7f8185ce47a51c8
+3	501	7780732542263814	E:/SHL/Project_Management/CFD/upgrade_app/cfd_upgrade_app/build/Desktop_Qt_5_15_2_MinGW_32_bit-Release/cfd_upgrade_app_autogen/mocs_compilation.cpp	e7f8185ce47a51c8
+541	647	7780732544338272	CMakeFiles/cfd_upgrade_app.dir/upgrade.cpp.obj	bc100b0e3e70b7ed
+517	1605	7780732553932604	CMakeFiles/cfd_upgrade_app.dir/cfd_upgrade_app_autogen/mocs_compilation.cpp.obj	f2fba19db2a3593
+551	1611	7780732554002419	CMakeFiles/cfd_upgrade_app.dir/myserialport.cpp.obj	80a6ec9b4e5e0ebd
+524	1639	7780732554281897	CMakeFiles/cfd_upgrade_app.dir/main.cpp.obj	dc9955f2468c2767
+531	3156	7780732569451379	CMakeFiles/cfd_upgrade_app.dir/mainwindow.cpp.obj	a10de03274840444
+3157	3302	7780732570877278	cfd_upgrade_app.exe	e8b8790978033a8c

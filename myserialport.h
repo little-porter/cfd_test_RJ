@@ -12,7 +12,7 @@
 #include <QObject>
 
 #define MYSERIALPORT_FIFO_SIZE      100
-#define MYSERIALPORT_DATA_MAXSIZE   100
+#define MYSERIALPORT_DATA_MAXSIZE   2048
 
 
 class myserialport : public QObject
