@@ -86,7 +86,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -423,7 +423,7 @@
          <property name="title">
           <string>报警信息</string>
          </property>
-         <widget class="QWidget" name="">
+         <widget class="QWidget" name="layoutWidget">
           <property name="geometry">
            <rect>
             <x>42</x>
@@ -1331,7 +1331,7 @@ border-radius:15px;</string>
        <rect>
         <x>20</x>
         <y>30</y>
-        <width>281</width>
+        <width>471</width>
         <height>381</height>
        </rect>
       </property>
@@ -1391,53 +1391,13 @@ border-radius:15px;</string>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget_3">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>130</y>
-         <width>237</width>
-         <height>50</height>
-        </rect>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_19">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_59">
-          <property name="text">
-           <string>CO校准系数 k</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lEdit_co_k_calib">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_60">
-          <property name="text">
-           <string>CO校准系数 b</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lEdit_co_b_calib">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="layoutWidget_5">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>220</y>
-         <width>237</width>
-         <height>50</height>
+         <x>230</x>
+         <y>160</y>
+         <width>231</width>
+         <height>211</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_21">
@@ -1469,14 +1429,166 @@ border-radius:15px;</string>
           </property>
          </widget>
         </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_69">
+          <property name="text">
+           <string>H2校准系数 a1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lEdit_h2_a1_calib">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_70">
+          <property name="text">
+           <string>H2校准系数 a2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="lEdit_h2_a2_calib">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_71">
+          <property name="text">
+           <string>H2校准系数 a3</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="lEdit_h2_a3_calib">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_72">
+          <property name="text">
+           <string>H2校准系数 a4</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="lEdit_h2_a4_calib">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>168</y>
+         <width>201</width>
+         <height>201</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_19">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_59">
+          <property name="text">
+           <string>CO校准系数 k</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="lEdit_co_k_calib">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_60">
+          <property name="text">
+           <string>CO校准系数 b</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lEdit_co_b_calib">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_73">
+          <property name="text">
+           <string>CO校准系数 a1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lEdit_co_a1_calib">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_74">
+          <property name="text">
+           <string>CO校准系数 a2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="lEdit_co_a2_calib">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_75">
+          <property name="text">
+           <string>CO校准系数 a3</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="lEdit_co_a3_calib">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_76">
+          <property name="text">
+           <string>CO校准系数 a4</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="lEdit_co_a4_calib">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
      <widget class="QGroupBox" name="groupBox_5">
       <property name="geometry">
        <rect>
-        <x>380</x>
-        <y>40</y>
+        <x>520</x>
+        <y>30</y>
         <width>341</width>
         <height>101</height>
        </rect>
@@ -1527,8 +1639,8 @@ border-radius:15px;</string>
      <widget class="QGroupBox" name="groupBox_6">
       <property name="geometry">
        <rect>
-        <x>380</x>
-        <y>150</y>
+        <x>510</x>
+        <y>140</y>
         <width>341</width>
         <height>101</height>
        </rect>
@@ -1579,22 +1691,22 @@ border-radius:15px;</string>
      <widget class="QGroupBox" name="groupBox_7">
       <property name="geometry">
        <rect>
-        <x>380</x>
-        <y>270</y>
+        <x>510</x>
+        <y>240</y>
         <width>341</width>
-        <height>101</height>
+        <height>191</height>
        </rect>
       </property>
       <property name="title">
        <string>H2校准系数</string>
       </property>
-      <widget class="QWidget" name="layoutWidget_4">
+      <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
         <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>318</width>
-         <height>52</height>
+         <x>21</x>
+         <y>21</y>
+         <width>298</width>
+         <height>160</height>
         </rect>
        </property>
        <layout class="QGridLayout" name="gridLayout_20">
@@ -1618,7 +1730,47 @@ border-radius:15px;</string>
         <item row="1" column="1">
          <widget class="QLineEdit" name="lEdit_h2_b_calib_set"/>
         </item>
-        <item row="1" column="2">
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_65">
+          <property name="text">
+           <string>H2校准系数 a1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="lEdit_h2_a1_calib_set"/>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_66">
+          <property name="text">
+           <string>H2校准系数 a2</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLineEdit" name="lEdit_h2_a2_calib_set"/>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_67">
+          <property name="text">
+           <string>H2校准系数 a3</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QLineEdit" name="lEdit_h2_a3_calib_set"/>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_68">
+          <property name="text">
+           <string>H2校准系数 a4</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLineEdit" name="lEdit_h2_a4_calib_set"/>
+        </item>
+        <item row="5" column="2">
          <widget class="QPushButton" name="btn_h2_calib_set">
           <property name="text">
            <string>设置</string>

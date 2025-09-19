@@ -91,6 +91,8 @@ private slots:
 
     void on_btn_h2_calib_set_clicked();
 
+    void on_openButton_clicked();
+
 private:
     typedef enum _run_process{
         RUN_PROCESS_INIT = 0,

@@ -88,7 +88,7 @@ public:
     QLineEdit *lEdit_battery_temperature;
     QLabel *label_118;
     QGroupBox *groupBox_8;
-    QWidget *widget;
+    QWidget *layoutWidget4;
     QGridLayout *gridLayout_8;
     QLabel *label;
     QLabel *label_fire;
@@ -109,17 +109,17 @@ public:
     QLabel *label_9;
     QLabel *label_co;
     QWidget *tab_3;
-    QWidget *layoutWidget4;
+    QWidget *layoutWidget5;
     QGridLayout *gridLayout_13;
     QGroupBox *groupBox_12;
-    QWidget *layoutWidget5;
+    QWidget *layoutWidget6;
     QGridLayout *gridLayout_14;
     QLabel *label_21;
     QLineEdit *lEdit_collect_version;
     QLabel *label_22;
     QLineEdit *lEdit_inference_version;
     QGroupBox *groupBox_15;
-    QWidget *layoutWidget6;
+    QWidget *layoutWidget7;
     QGridLayout *gridLayout_18;
     QLabel *label_119;
     QLineEdit *lEdit_h2_th;
@@ -138,7 +138,7 @@ public:
     QLabel *label_126;
     QLineEdit *lEdit_charge_th;
     QGroupBox *groupBox_13;
-    QWidget *layoutWidget7;
+    QWidget *layoutWidget8;
     QGridLayout *gridLayout_2;
     QLabel *label_41;
     QLineEdit *lEdit_device_serial;
@@ -155,11 +155,11 @@ public:
     QPushButton *btn_getInfo;
     QWidget *tab_4;
     QGroupBox *groupBox_14;
-    QWidget *layoutWidget8;
+    QWidget *layoutWidget9;
     QGridLayout *gridLayout_17;
     QProgressBar *progressBar;
     QTextEdit *textEdit;
-    QWidget *layoutWidget9;
+    QWidget *layoutWidget10;
     QGridLayout *gridLayout_16;
     QRadioButton *r_btn_inference;
     QPushButton *chooseButton;
@@ -168,10 +168,10 @@ public:
     QComboBox *comboBox;
     QRadioButton *r_btn_collect;
     QWidget *tab_5;
-    QWidget *layoutWidget10;
+    QWidget *layoutWidget11;
     QGridLayout *gridLayout_12;
     QGroupBox *groupBox_2;
-    QWidget *layoutWidget11;
+    QWidget *layoutWidget12;
     QGridLayout *gridLayout;
     QLabel *label_33;
     QLineEdit *lEdit_h2_th_set;
@@ -191,7 +191,7 @@ public:
     QLineEdit *lEdit_charge_th_set;
     QPushButton *btn_threshold_set;
     QGroupBox *groupBox_3;
-    QWidget *layoutWidget12;
+    QWidget *layoutWidget13;
     QGridLayout *gridLayout_5;
     QLabel *label_53;
     QLineEdit *lEdit_serial_set;
@@ -206,7 +206,7 @@ public:
     QLineEdit *lEdit_current_set;
     QPushButton *btn_current_set;
     QGroupBox *groupBox_4;
-    QWidget *layoutWidget13;
+    QWidget *layoutWidget14;
     QGridLayout *gridLayout_7;
     QLabel *label_56;
     QPushButton *btn_serial_set_2;
@@ -217,26 +217,42 @@ public:
     QWidget *tab_2;
     QGroupBox *groupBox;
     QPushButton *btn_voltage_calib_get;
-    QWidget *layoutWidget14;
+    QWidget *layoutWidget15;
     QGridLayout *gridLayout_3;
     QLabel *label_27;
     QLineEdit *lEdit_voltage_range;
     QLabel *label_26;
     QLineEdit *lEdit_voltage_zero;
-    QWidget *layoutWidget_3;
-    QGridLayout *gridLayout_19;
-    QLabel *label_59;
-    QLineEdit *lEdit_co_k_calib;
-    QLabel *label_60;
-    QLineEdit *lEdit_co_b_calib;
-    QWidget *layoutWidget_5;
+    QWidget *widget;
     QGridLayout *gridLayout_21;
     QLabel *label_63;
     QLineEdit *lEdit_h2_k_calib;
     QLabel *label_64;
     QLineEdit *lEdit_h2_b_calib;
+    QLabel *label_69;
+    QLineEdit *lEdit_h2_a1_calib;
+    QLabel *label_70;
+    QLineEdit *lEdit_h2_a2_calib;
+    QLabel *label_71;
+    QLineEdit *lEdit_h2_a3_calib;
+    QLabel *label_72;
+    QLineEdit *lEdit_h2_a4_calib;
+    QWidget *widget1;
+    QGridLayout *gridLayout_19;
+    QLabel *label_59;
+    QLineEdit *lEdit_co_k_calib;
+    QLabel *label_60;
+    QLineEdit *lEdit_co_b_calib;
+    QLabel *label_73;
+    QLineEdit *lEdit_co_a1_calib;
+    QLabel *label_74;
+    QLineEdit *lEdit_co_a2_calib;
+    QLabel *label_75;
+    QLineEdit *lEdit_co_a3_calib;
+    QLabel *label_76;
+    QLineEdit *lEdit_co_a4_calib;
     QGroupBox *groupBox_5;
-    QWidget *layoutWidget15;
+    QWidget *layoutWidget16;
     QGridLayout *gridLayout_4;
     QLabel *label_24;
     QLineEdit *lEdit_voltage_range_calib;
@@ -252,12 +268,20 @@ public:
     QLineEdit *lEdit_co_b_calib_set;
     QPushButton *btn_co_calib_set;
     QGroupBox *groupBox_7;
-    QWidget *layoutWidget_4;
+    QWidget *widget2;
     QGridLayout *gridLayout_20;
     QLabel *label_61;
     QLineEdit *lEdit_h2_k_calib_set;
     QLabel *label_62;
     QLineEdit *lEdit_h2_b_calib_set;
+    QLabel *label_65;
+    QLineEdit *lEdit_h2_a1_calib_set;
+    QLabel *label_66;
+    QLineEdit *lEdit_h2_a2_calib_set;
+    QLabel *label_67;
+    QLineEdit *lEdit_h2_a3_calib_set;
+    QLabel *label_68;
+    QLineEdit *lEdit_h2_a4_calib_set;
     QPushButton *btn_h2_calib_set;
     QComboBox *cbox_modbus_addr;
     QPushButton *btn_net_init;
@@ -532,18 +556,18 @@ public:
 
         groupBox_8 = new QGroupBox(layoutWidget);
         groupBox_8->setObjectName(QString::fromUtf8("groupBox_8"));
-        widget = new QWidget(groupBox_8);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(42, 20, 231, 181));
-        gridLayout_8 = new QGridLayout(widget);
+        layoutWidget4 = new QWidget(groupBox_8);
+        layoutWidget4->setObjectName(QString::fromUtf8("layoutWidget4"));
+        layoutWidget4->setGeometry(QRect(42, 20, 231, 181));
+        gridLayout_8 = new QGridLayout(layoutWidget4);
         gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
         gridLayout_8->setContentsMargins(0, 0, 0, 0);
-        label = new QLabel(widget);
+        label = new QLabel(layoutWidget4);
         label->setObjectName(QString::fromUtf8("label"));
 
         gridLayout_8->addWidget(label, 0, 1, 1, 1);
 
-        label_fire = new QLabel(widget);
+        label_fire = new QLabel(layoutWidget4);
         label_fire->setObjectName(QString::fromUtf8("label_fire"));
         label_fire->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
 "border-radius:15px;"));
@@ -552,12 +576,12 @@ public:
 
         gridLayout_8->addWidget(label_fire, 0, 2, 1, 1);
 
-        label_3 = new QLabel(widget);
+        label_3 = new QLabel(layoutWidget4);
         label_3->setObjectName(QString::fromUtf8("label_3"));
 
         gridLayout_8->addWidget(label_3, 1, 0, 1, 1);
 
-        label_underVoltage = new QLabel(widget);
+        label_underVoltage = new QLabel(layoutWidget4);
         label_underVoltage->setObjectName(QString::fromUtf8("label_underVoltage"));
         label_underVoltage->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
 "border-radius:15px;"));
@@ -566,12 +590,12 @@ public:
 
         gridLayout_8->addWidget(label_underVoltage, 1, 1, 1, 1);
 
-        label_4 = new QLabel(widget);
+        label_4 = new QLabel(layoutWidget4);
         label_4->setObjectName(QString::fromUtf8("label_4"));
 
         gridLayout_8->addWidget(label_4, 1, 2, 1, 1);
 
-        label_overVoltage = new QLabel(widget);
+        label_overVoltage = new QLabel(layoutWidget4);
         label_overVoltage->setObjectName(QString::fromUtf8("label_overVoltage"));
         label_overVoltage->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
 "border-radius:15px;"));
@@ -580,12 +604,12 @@ public:
 
         gridLayout_8->addWidget(label_overVoltage, 1, 3, 1, 1);
 
-        label_5 = new QLabel(widget);
+        label_5 = new QLabel(layoutWidget4);
         label_5->setObjectName(QString::fromUtf8("label_5"));
 
         gridLayout_8->addWidget(label_5, 2, 0, 1, 1);
 
-        label_overCharge = new QLabel(widget);
+        label_overCharge = new QLabel(layoutWidget4);
         label_overCharge->setObjectName(QString::fromUtf8("label_overCharge"));
         label_overCharge->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
 "border-radius:15px;"));
@@ -594,12 +618,12 @@ public:
 
         gridLayout_8->addWidget(label_overCharge, 2, 1, 1, 1);
 
-        label_6 = new QLabel(widget);
+        label_6 = new QLabel(layoutWidget4);
         label_6->setObjectName(QString::fromUtf8("label_6"));
 
         gridLayout_8->addWidget(label_6, 2, 2, 1, 1);
 
-        label_overDischarge = new QLabel(widget);
+        label_overDischarge = new QLabel(layoutWidget4);
         label_overDischarge->setObjectName(QString::fromUtf8("label_overDischarge"));
         label_overDischarge->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
 "border-radius:15px;"));
@@ -608,12 +632,12 @@ public:
 
         gridLayout_8->addWidget(label_overDischarge, 2, 3, 1, 1);
 
-        label_10 = new QLabel(widget);
+        label_10 = new QLabel(layoutWidget4);
         label_10->setObjectName(QString::fromUtf8("label_10"));
 
         gridLayout_8->addWidget(label_10, 3, 0, 1, 1);
 
-        label_overTemp = new QLabel(widget);
+        label_overTemp = new QLabel(layoutWidget4);
         label_overTemp->setObjectName(QString::fromUtf8("label_overTemp"));
         label_overTemp->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
 "border-radius:15px;"));
@@ -622,12 +646,12 @@ public:
 
         gridLayout_8->addWidget(label_overTemp, 3, 1, 1, 1);
 
-        label_7 = new QLabel(widget);
+        label_7 = new QLabel(layoutWidget4);
         label_7->setObjectName(QString::fromUtf8("label_7"));
 
         gridLayout_8->addWidget(label_7, 3, 2, 1, 1);
 
-        label_smk = new QLabel(widget);
+        label_smk = new QLabel(layoutWidget4);
         label_smk->setObjectName(QString::fromUtf8("label_smk"));
         label_smk->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
 "border-radius:15px;"));
@@ -636,12 +660,12 @@ public:
 
         gridLayout_8->addWidget(label_smk, 3, 3, 1, 1);
 
-        label_8 = new QLabel(widget);
+        label_8 = new QLabel(layoutWidget4);
         label_8->setObjectName(QString::fromUtf8("label_8"));
 
         gridLayout_8->addWidget(label_8, 4, 0, 1, 1);
 
-        label_h2 = new QLabel(widget);
+        label_h2 = new QLabel(layoutWidget4);
         label_h2->setObjectName(QString::fromUtf8("label_h2"));
         label_h2->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
 "border-radius:15px;"));
@@ -650,12 +674,12 @@ public:
 
         gridLayout_8->addWidget(label_h2, 4, 1, 1, 1);
 
-        label_9 = new QLabel(widget);
+        label_9 = new QLabel(layoutWidget4);
         label_9->setObjectName(QString::fromUtf8("label_9"));
 
         gridLayout_8->addWidget(label_9, 4, 2, 1, 1);
 
-        label_co = new QLabel(widget);
+        label_co = new QLabel(layoutWidget4);
         label_co->setObjectName(QString::fromUtf8("label_co"));
         label_co->setStyleSheet(QString::fromUtf8("background-color: rgb(0, 0, 0);\n"
 "border-radius:15px;"));
@@ -670,37 +694,37 @@ public:
         tabWidget->addTab(tab, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName(QString::fromUtf8("tab_3"));
-        layoutWidget4 = new QWidget(tab_3);
-        layoutWidget4->setObjectName(QString::fromUtf8("layoutWidget4"));
-        layoutWidget4->setGeometry(QRect(11, 8, 831, 411));
-        gridLayout_13 = new QGridLayout(layoutWidget4);
+        layoutWidget5 = new QWidget(tab_3);
+        layoutWidget5->setObjectName(QString::fromUtf8("layoutWidget5"));
+        layoutWidget5->setGeometry(QRect(11, 8, 831, 411));
+        gridLayout_13 = new QGridLayout(layoutWidget5);
         gridLayout_13->setObjectName(QString::fromUtf8("gridLayout_13"));
         gridLayout_13->setContentsMargins(0, 0, 0, 0);
-        groupBox_12 = new QGroupBox(layoutWidget4);
+        groupBox_12 = new QGroupBox(layoutWidget5);
         groupBox_12->setObjectName(QString::fromUtf8("groupBox_12"));
-        layoutWidget5 = new QWidget(groupBox_12);
-        layoutWidget5->setObjectName(QString::fromUtf8("layoutWidget5"));
-        layoutWidget5->setGeometry(QRect(20, 30, 361, 111));
-        gridLayout_14 = new QGridLayout(layoutWidget5);
+        layoutWidget6 = new QWidget(groupBox_12);
+        layoutWidget6->setObjectName(QString::fromUtf8("layoutWidget6"));
+        layoutWidget6->setGeometry(QRect(20, 30, 361, 111));
+        gridLayout_14 = new QGridLayout(layoutWidget6);
         gridLayout_14->setObjectName(QString::fromUtf8("gridLayout_14"));
         gridLayout_14->setContentsMargins(0, 0, 0, 0);
-        label_21 = new QLabel(layoutWidget5);
+        label_21 = new QLabel(layoutWidget6);
         label_21->setObjectName(QString::fromUtf8("label_21"));
 
         gridLayout_14->addWidget(label_21, 0, 0, 1, 1);
 
-        lEdit_collect_version = new QLineEdit(layoutWidget5);
+        lEdit_collect_version = new QLineEdit(layoutWidget6);
         lEdit_collect_version->setObjectName(QString::fromUtf8("lEdit_collect_version"));
         lEdit_collect_version->setReadOnly(true);
 
         gridLayout_14->addWidget(lEdit_collect_version, 0, 1, 1, 1);
 
-        label_22 = new QLabel(layoutWidget5);
+        label_22 = new QLabel(layoutWidget6);
         label_22->setObjectName(QString::fromUtf8("label_22"));
 
         gridLayout_14->addWidget(label_22, 1, 0, 1, 1);
 
-        lEdit_inference_version = new QLineEdit(layoutWidget5);
+        lEdit_inference_version = new QLineEdit(layoutWidget6);
         lEdit_inference_version->setObjectName(QString::fromUtf8("lEdit_inference_version"));
         lEdit_inference_version->setReadOnly(true);
 
@@ -709,97 +733,97 @@ public:
 
         gridLayout_13->addWidget(groupBox_12, 0, 0, 1, 1);
 
-        groupBox_15 = new QGroupBox(layoutWidget4);
+        groupBox_15 = new QGroupBox(layoutWidget5);
         groupBox_15->setObjectName(QString::fromUtf8("groupBox_15"));
-        layoutWidget6 = new QWidget(groupBox_15);
-        layoutWidget6->setObjectName(QString::fromUtf8("layoutWidget6"));
-        layoutWidget6->setGeometry(QRect(42, 22, 341, 341));
-        gridLayout_18 = new QGridLayout(layoutWidget6);
+        layoutWidget7 = new QWidget(groupBox_15);
+        layoutWidget7->setObjectName(QString::fromUtf8("layoutWidget7"));
+        layoutWidget7->setGeometry(QRect(42, 22, 341, 341));
+        gridLayout_18 = new QGridLayout(layoutWidget7);
         gridLayout_18->setObjectName(QString::fromUtf8("gridLayout_18"));
         gridLayout_18->setContentsMargins(0, 0, 0, 0);
-        label_119 = new QLabel(layoutWidget6);
+        label_119 = new QLabel(layoutWidget7);
         label_119->setObjectName(QString::fromUtf8("label_119"));
 
         gridLayout_18->addWidget(label_119, 0, 0, 1, 1);
 
-        lEdit_h2_th = new QLineEdit(layoutWidget6);
+        lEdit_h2_th = new QLineEdit(layoutWidget7);
         lEdit_h2_th->setObjectName(QString::fromUtf8("lEdit_h2_th"));
         lEdit_h2_th->setReadOnly(true);
 
         gridLayout_18->addWidget(lEdit_h2_th, 0, 1, 1, 1);
 
-        label_120 = new QLabel(layoutWidget6);
+        label_120 = new QLabel(layoutWidget7);
         label_120->setObjectName(QString::fromUtf8("label_120"));
 
         gridLayout_18->addWidget(label_120, 1, 0, 1, 1);
 
-        lEdit_co_th = new QLineEdit(layoutWidget6);
+        lEdit_co_th = new QLineEdit(layoutWidget7);
         lEdit_co_th->setObjectName(QString::fromUtf8("lEdit_co_th"));
         lEdit_co_th->setReadOnly(true);
 
         gridLayout_18->addWidget(lEdit_co_th, 1, 1, 1, 1);
 
-        label_121 = new QLabel(layoutWidget6);
+        label_121 = new QLabel(layoutWidget7);
         label_121->setObjectName(QString::fromUtf8("label_121"));
 
         gridLayout_18->addWidget(label_121, 2, 0, 1, 1);
 
-        lEdit_temp_th = new QLineEdit(layoutWidget6);
+        lEdit_temp_th = new QLineEdit(layoutWidget7);
         lEdit_temp_th->setObjectName(QString::fromUtf8("lEdit_temp_th"));
         lEdit_temp_th->setReadOnly(true);
 
         gridLayout_18->addWidget(lEdit_temp_th, 2, 1, 1, 1);
 
-        label_122 = new QLabel(layoutWidget6);
+        label_122 = new QLabel(layoutWidget7);
         label_122->setObjectName(QString::fromUtf8("label_122"));
 
         gridLayout_18->addWidget(label_122, 3, 0, 1, 1);
 
-        lEdit_temp_ratio_th = new QLineEdit(layoutWidget6);
+        lEdit_temp_ratio_th = new QLineEdit(layoutWidget7);
         lEdit_temp_ratio_th->setObjectName(QString::fromUtf8("lEdit_temp_ratio_th"));
         lEdit_temp_ratio_th->setReadOnly(true);
 
         gridLayout_18->addWidget(lEdit_temp_ratio_th, 3, 1, 1, 1);
 
-        label_123 = new QLabel(layoutWidget6);
+        label_123 = new QLabel(layoutWidget7);
         label_123->setObjectName(QString::fromUtf8("label_123"));
 
         gridLayout_18->addWidget(label_123, 4, 0, 1, 1);
 
-        lEdit_voltage_high_th = new QLineEdit(layoutWidget6);
+        lEdit_voltage_high_th = new QLineEdit(layoutWidget7);
         lEdit_voltage_high_th->setObjectName(QString::fromUtf8("lEdit_voltage_high_th"));
         lEdit_voltage_high_th->setReadOnly(true);
 
         gridLayout_18->addWidget(lEdit_voltage_high_th, 4, 1, 1, 1);
 
-        label_124 = new QLabel(layoutWidget6);
+        label_124 = new QLabel(layoutWidget7);
         label_124->setObjectName(QString::fromUtf8("label_124"));
 
         gridLayout_18->addWidget(label_124, 5, 0, 1, 1);
 
-        lEdit_voltage_low_th = new QLineEdit(layoutWidget6);
+        lEdit_voltage_low_th = new QLineEdit(layoutWidget7);
         lEdit_voltage_low_th->setObjectName(QString::fromUtf8("lEdit_voltage_low_th"));
         lEdit_voltage_low_th->setReadOnly(true);
 
         gridLayout_18->addWidget(lEdit_voltage_low_th, 5, 1, 1, 1);
 
-        label_125 = new QLabel(layoutWidget6);
+        label_125 = new QLabel(layoutWidget7);
         label_125->setObjectName(QString::fromUtf8("label_125"));
 
         gridLayout_18->addWidget(label_125, 6, 0, 1, 1);
 
-        lEdit_discharge_th = new QLineEdit(layoutWidget6);
+        lEdit_discharge_th = new QLineEdit(layoutWidget7);
         lEdit_discharge_th->setObjectName(QString::fromUtf8("lEdit_discharge_th"));
         lEdit_discharge_th->setReadOnly(true);
 
         gridLayout_18->addWidget(lEdit_discharge_th, 6, 1, 1, 1);
 
-        label_126 = new QLabel(layoutWidget6);
+        label_126 = new QLabel(layoutWidget7);
         label_126->setObjectName(QString::fromUtf8("label_126"));
 
         gridLayout_18->addWidget(label_126, 7, 0, 1, 1);
 
-        lEdit_charge_th = new QLineEdit(layoutWidget6);
+        lEdit_charge_th = new QLineEdit(layoutWidget7);
         lEdit_charge_th->setObjectName(QString::fromUtf8("lEdit_charge_th"));
         lEdit_charge_th->setReadOnly(true);
 
@@ -808,75 +832,75 @@ public:
 
         gridLayout_13->addWidget(groupBox_15, 0, 1, 2, 1);
 
-        groupBox_13 = new QGroupBox(layoutWidget4);
+        groupBox_13 = new QGroupBox(layoutWidget5);
         groupBox_13->setObjectName(QString::fromUtf8("groupBox_13"));
-        layoutWidget7 = new QWidget(groupBox_13);
-        layoutWidget7->setObjectName(QString::fromUtf8("layoutWidget7"));
-        layoutWidget7->setGeometry(QRect(21, 27, 361, 141));
-        gridLayout_2 = new QGridLayout(layoutWidget7);
+        layoutWidget8 = new QWidget(groupBox_13);
+        layoutWidget8->setObjectName(QString::fromUtf8("layoutWidget8"));
+        layoutWidget8->setGeometry(QRect(21, 27, 361, 141));
+        gridLayout_2 = new QGridLayout(layoutWidget8);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         gridLayout_2->setContentsMargins(0, 0, 0, 0);
-        label_41 = new QLabel(layoutWidget7);
+        label_41 = new QLabel(layoutWidget8);
         label_41->setObjectName(QString::fromUtf8("label_41"));
 
         gridLayout_2->addWidget(label_41, 0, 0, 1, 2);
 
-        lEdit_device_serial = new QLineEdit(layoutWidget7);
+        lEdit_device_serial = new QLineEdit(layoutWidget8);
         lEdit_device_serial->setObjectName(QString::fromUtf8("lEdit_device_serial"));
         lEdit_device_serial->setReadOnly(true);
 
         gridLayout_2->addWidget(lEdit_device_serial, 0, 2, 1, 2);
 
-        label_42 = new QLabel(layoutWidget7);
+        label_42 = new QLabel(layoutWidget8);
         label_42->setObjectName(QString::fromUtf8("label_42"));
 
         gridLayout_2->addWidget(label_42, 1, 0, 1, 2);
 
-        lEdit_mac = new QLineEdit(layoutWidget7);
+        lEdit_mac = new QLineEdit(layoutWidget8);
         lEdit_mac->setObjectName(QString::fromUtf8("lEdit_mac"));
         lEdit_mac->setReadOnly(true);
 
         gridLayout_2->addWidget(lEdit_mac, 1, 2, 1, 2);
 
-        label_43 = new QLabel(layoutWidget7);
+        label_43 = new QLabel(layoutWidget8);
         label_43->setObjectName(QString::fromUtf8("label_43"));
 
         gridLayout_2->addWidget(label_43, 2, 0, 1, 2);
 
-        lEdit_modbus_addr = new QLineEdit(layoutWidget7);
+        lEdit_modbus_addr = new QLineEdit(layoutWidget8);
         lEdit_modbus_addr->setObjectName(QString::fromUtf8("lEdit_modbus_addr"));
         lEdit_modbus_addr->setReadOnly(true);
 
         gridLayout_2->addWidget(lEdit_modbus_addr, 2, 2, 1, 2);
 
-        label_44 = new QLabel(layoutWidget7);
+        label_44 = new QLabel(layoutWidget8);
         label_44->setObjectName(QString::fromUtf8("label_44"));
 
         gridLayout_2->addWidget(label_44, 3, 0, 1, 2);
 
-        lEdit_capacity = new QLineEdit(layoutWidget7);
+        lEdit_capacity = new QLineEdit(layoutWidget8);
         lEdit_capacity->setObjectName(QString::fromUtf8("lEdit_capacity"));
         lEdit_capacity->setReadOnly(true);
 
         gridLayout_2->addWidget(lEdit_capacity, 3, 2, 1, 2);
 
-        label_127 = new QLabel(layoutWidget7);
+        label_127 = new QLabel(layoutWidget8);
         label_127->setObjectName(QString::fromUtf8("label_127"));
 
         gridLayout_2->addWidget(label_127, 4, 0, 1, 1);
 
-        lEdit_low_power = new QLineEdit(layoutWidget7);
+        lEdit_low_power = new QLineEdit(layoutWidget8);
         lEdit_low_power->setObjectName(QString::fromUtf8("lEdit_low_power"));
         lEdit_low_power->setReadOnly(true);
 
         gridLayout_2->addWidget(lEdit_low_power, 4, 1, 1, 1);
 
-        label_128 = new QLabel(layoutWidget7);
+        label_128 = new QLabel(layoutWidget8);
         label_128->setObjectName(QString::fromUtf8("label_128"));
 
         gridLayout_2->addWidget(label_128, 4, 2, 1, 1);
 
-        lEdit_balance = new QLineEdit(layoutWidget7);
+        lEdit_balance = new QLineEdit(layoutWidget8);
         lEdit_balance->setObjectName(QString::fromUtf8("lEdit_balance"));
         lEdit_balance->setReadOnly(true);
 
@@ -885,7 +909,7 @@ public:
 
         gridLayout_13->addWidget(groupBox_13, 1, 0, 1, 1);
 
-        btn_getInfo = new QPushButton(layoutWidget4);
+        btn_getInfo = new QPushButton(layoutWidget5);
         btn_getInfo->setObjectName(QString::fromUtf8("btn_getInfo"));
 
         gridLayout_13->addWidget(btn_getInfo, 2, 0, 1, 2);
@@ -896,55 +920,55 @@ public:
         groupBox_14 = new QGroupBox(tab_4);
         groupBox_14->setObjectName(QString::fromUtf8("groupBox_14"));
         groupBox_14->setGeometry(QRect(10, 10, 321, 401));
-        layoutWidget8 = new QWidget(groupBox_14);
-        layoutWidget8->setObjectName(QString::fromUtf8("layoutWidget8"));
-        layoutWidget8->setGeometry(QRect(10, 20, 301, 361));
-        gridLayout_17 = new QGridLayout(layoutWidget8);
+        layoutWidget9 = new QWidget(groupBox_14);
+        layoutWidget9->setObjectName(QString::fromUtf8("layoutWidget9"));
+        layoutWidget9->setGeometry(QRect(10, 20, 301, 361));
+        gridLayout_17 = new QGridLayout(layoutWidget9);
         gridLayout_17->setObjectName(QString::fromUtf8("gridLayout_17"));
         gridLayout_17->setContentsMargins(0, 0, 0, 0);
-        progressBar = new QProgressBar(layoutWidget8);
+        progressBar = new QProgressBar(layoutWidget9);
         progressBar->setObjectName(QString::fromUtf8("progressBar"));
         progressBar->setValue(24);
 
         gridLayout_17->addWidget(progressBar, 1, 0, 1, 1);
 
-        textEdit = new QTextEdit(layoutWidget8);
+        textEdit = new QTextEdit(layoutWidget9);
         textEdit->setObjectName(QString::fromUtf8("textEdit"));
 
         gridLayout_17->addWidget(textEdit, 0, 0, 1, 1);
 
-        layoutWidget9 = new QWidget(tab_4);
-        layoutWidget9->setObjectName(QString::fromUtf8("layoutWidget9"));
-        layoutWidget9->setGeometry(QRect(340, 286, 251, 121));
-        gridLayout_16 = new QGridLayout(layoutWidget9);
+        layoutWidget10 = new QWidget(tab_4);
+        layoutWidget10->setObjectName(QString::fromUtf8("layoutWidget10"));
+        layoutWidget10->setGeometry(QRect(340, 286, 251, 121));
+        gridLayout_16 = new QGridLayout(layoutWidget10);
         gridLayout_16->setObjectName(QString::fromUtf8("gridLayout_16"));
         gridLayout_16->setContentsMargins(0, 0, 0, 0);
-        r_btn_inference = new QRadioButton(layoutWidget9);
+        r_btn_inference = new QRadioButton(layoutWidget10);
         r_btn_inference->setObjectName(QString::fromUtf8("r_btn_inference"));
 
         gridLayout_16->addWidget(r_btn_inference, 0, 1, 1, 1);
 
-        chooseButton = new QPushButton(layoutWidget9);
+        chooseButton = new QPushButton(layoutWidget10);
         chooseButton->setObjectName(QString::fromUtf8("chooseButton"));
 
         gridLayout_16->addWidget(chooseButton, 1, 0, 1, 1);
 
-        downloadButton = new QPushButton(layoutWidget9);
+        downloadButton = new QPushButton(layoutWidget10);
         downloadButton->setObjectName(QString::fromUtf8("downloadButton"));
 
         gridLayout_16->addWidget(downloadButton, 1, 1, 1, 1);
 
-        label_45 = new QLabel(layoutWidget9);
+        label_45 = new QLabel(layoutWidget10);
         label_45->setObjectName(QString::fromUtf8("label_45"));
 
         gridLayout_16->addWidget(label_45, 2, 0, 1, 1);
 
-        comboBox = new QComboBox(layoutWidget9);
+        comboBox = new QComboBox(layoutWidget10);
         comboBox->setObjectName(QString::fromUtf8("comboBox"));
 
         gridLayout_16->addWidget(comboBox, 2, 1, 1, 1);
 
-        r_btn_collect = new QRadioButton(layoutWidget9);
+        r_btn_collect = new QRadioButton(layoutWidget10);
         r_btn_collect->setObjectName(QString::fromUtf8("r_btn_collect"));
 
         gridLayout_16->addWidget(r_btn_collect, 0, 0, 1, 1);
@@ -952,101 +976,101 @@ public:
         tabWidget->addTab(tab_4, QString());
         tab_5 = new QWidget();
         tab_5->setObjectName(QString::fromUtf8("tab_5"));
-        layoutWidget10 = new QWidget(tab_5);
-        layoutWidget10->setObjectName(QString::fromUtf8("layoutWidget10"));
-        layoutWidget10->setGeometry(QRect(40, 20, 631, 381));
-        gridLayout_12 = new QGridLayout(layoutWidget10);
+        layoutWidget11 = new QWidget(tab_5);
+        layoutWidget11->setObjectName(QString::fromUtf8("layoutWidget11"));
+        layoutWidget11->setGeometry(QRect(40, 20, 631, 381));
+        gridLayout_12 = new QGridLayout(layoutWidget11);
         gridLayout_12->setObjectName(QString::fromUtf8("gridLayout_12"));
         gridLayout_12->setContentsMargins(0, 0, 0, 0);
-        groupBox_2 = new QGroupBox(layoutWidget10);
+        groupBox_2 = new QGroupBox(layoutWidget11);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        layoutWidget11 = new QWidget(groupBox_2);
-        layoutWidget11->setObjectName(QString::fromUtf8("layoutWidget11"));
-        layoutWidget11->setGeometry(QRect(10, 22, 291, 341));
-        gridLayout = new QGridLayout(layoutWidget11);
+        layoutWidget12 = new QWidget(groupBox_2);
+        layoutWidget12->setObjectName(QString::fromUtf8("layoutWidget12"));
+        layoutWidget12->setGeometry(QRect(10, 22, 291, 341));
+        gridLayout = new QGridLayout(layoutWidget12);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        label_33 = new QLabel(layoutWidget11);
+        label_33 = new QLabel(layoutWidget12);
         label_33->setObjectName(QString::fromUtf8("label_33"));
 
         gridLayout->addWidget(label_33, 0, 0, 1, 1);
 
-        lEdit_h2_th_set = new QLineEdit(layoutWidget11);
+        lEdit_h2_th_set = new QLineEdit(layoutWidget12);
         lEdit_h2_th_set->setObjectName(QString::fromUtf8("lEdit_h2_th_set"));
 
         gridLayout->addWidget(lEdit_h2_th_set, 0, 1, 1, 1);
 
-        label_34 = new QLabel(layoutWidget11);
+        label_34 = new QLabel(layoutWidget12);
         label_34->setObjectName(QString::fromUtf8("label_34"));
 
         gridLayout->addWidget(label_34, 1, 0, 1, 1);
 
-        lEdit_co_th_set = new QLineEdit(layoutWidget11);
+        lEdit_co_th_set = new QLineEdit(layoutWidget12);
         lEdit_co_th_set->setObjectName(QString::fromUtf8("lEdit_co_th_set"));
 
         gridLayout->addWidget(lEdit_co_th_set, 1, 1, 1, 1);
 
-        label_35 = new QLabel(layoutWidget11);
+        label_35 = new QLabel(layoutWidget12);
         label_35->setObjectName(QString::fromUtf8("label_35"));
 
         gridLayout->addWidget(label_35, 2, 0, 1, 1);
 
-        lEdit_temp_th_set = new QLineEdit(layoutWidget11);
+        lEdit_temp_th_set = new QLineEdit(layoutWidget12);
         lEdit_temp_th_set->setObjectName(QString::fromUtf8("lEdit_temp_th_set"));
 
         gridLayout->addWidget(lEdit_temp_th_set, 2, 1, 1, 1);
 
-        label_36 = new QLabel(layoutWidget11);
+        label_36 = new QLabel(layoutWidget12);
         label_36->setObjectName(QString::fromUtf8("label_36"));
 
         gridLayout->addWidget(label_36, 3, 0, 1, 1);
 
-        lEdit_temp_ratio_th_set = new QLineEdit(layoutWidget11);
+        lEdit_temp_ratio_th_set = new QLineEdit(layoutWidget12);
         lEdit_temp_ratio_th_set->setObjectName(QString::fromUtf8("lEdit_temp_ratio_th_set"));
 
         gridLayout->addWidget(lEdit_temp_ratio_th_set, 3, 1, 1, 1);
 
-        label_37 = new QLabel(layoutWidget11);
+        label_37 = new QLabel(layoutWidget12);
         label_37->setObjectName(QString::fromUtf8("label_37"));
 
         gridLayout->addWidget(label_37, 4, 0, 1, 1);
 
-        lEdit_voltage_high_th_set = new QLineEdit(layoutWidget11);
+        lEdit_voltage_high_th_set = new QLineEdit(layoutWidget12);
         lEdit_voltage_high_th_set->setObjectName(QString::fromUtf8("lEdit_voltage_high_th_set"));
 
         gridLayout->addWidget(lEdit_voltage_high_th_set, 4, 1, 1, 1);
 
-        label_38 = new QLabel(layoutWidget11);
+        label_38 = new QLabel(layoutWidget12);
         label_38->setObjectName(QString::fromUtf8("label_38"));
 
         gridLayout->addWidget(label_38, 5, 0, 1, 1);
 
-        lEdit_voltage_low_th_set = new QLineEdit(layoutWidget11);
+        lEdit_voltage_low_th_set = new QLineEdit(layoutWidget12);
         lEdit_voltage_low_th_set->setObjectName(QString::fromUtf8("lEdit_voltage_low_th_set"));
 
         gridLayout->addWidget(lEdit_voltage_low_th_set, 5, 1, 1, 1);
 
-        label_39 = new QLabel(layoutWidget11);
+        label_39 = new QLabel(layoutWidget12);
         label_39->setObjectName(QString::fromUtf8("label_39"));
 
         gridLayout->addWidget(label_39, 6, 0, 1, 1);
 
-        lEdit_discharge_th_set = new QLineEdit(layoutWidget11);
+        lEdit_discharge_th_set = new QLineEdit(layoutWidget12);
         lEdit_discharge_th_set->setObjectName(QString::fromUtf8("lEdit_discharge_th_set"));
 
         gridLayout->addWidget(lEdit_discharge_th_set, 6, 1, 1, 1);
 
-        label_40 = new QLabel(layoutWidget11);
+        label_40 = new QLabel(layoutWidget12);
         label_40->setObjectName(QString::fromUtf8("label_40"));
 
         gridLayout->addWidget(label_40, 7, 0, 1, 1);
 
-        lEdit_charge_th_set = new QLineEdit(layoutWidget11);
+        lEdit_charge_th_set = new QLineEdit(layoutWidget12);
         lEdit_charge_th_set->setObjectName(QString::fromUtf8("lEdit_charge_th_set"));
 
         gridLayout->addWidget(lEdit_charge_th_set, 7, 1, 1, 1);
 
-        btn_threshold_set = new QPushButton(layoutWidget11);
+        btn_threshold_set = new QPushButton(layoutWidget12);
         btn_threshold_set->setObjectName(QString::fromUtf8("btn_threshold_set"));
 
         gridLayout->addWidget(btn_threshold_set, 8, 0, 1, 2);
@@ -1054,70 +1078,70 @@ public:
 
         gridLayout_12->addWidget(groupBox_2, 0, 0, 2, 1);
 
-        groupBox_3 = new QGroupBox(layoutWidget10);
+        groupBox_3 = new QGroupBox(layoutWidget11);
         groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
-        layoutWidget12 = new QWidget(groupBox_3);
-        layoutWidget12->setObjectName(QString::fromUtf8("layoutWidget12"));
-        layoutWidget12->setGeometry(QRect(10, 20, 291, 151));
-        gridLayout_5 = new QGridLayout(layoutWidget12);
+        layoutWidget13 = new QWidget(groupBox_3);
+        layoutWidget13->setObjectName(QString::fromUtf8("layoutWidget13"));
+        layoutWidget13->setGeometry(QRect(10, 20, 291, 151));
+        gridLayout_5 = new QGridLayout(layoutWidget13);
         gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
         gridLayout_5->setContentsMargins(0, 0, 0, 0);
-        label_53 = new QLabel(layoutWidget12);
+        label_53 = new QLabel(layoutWidget13);
         label_53->setObjectName(QString::fromUtf8("label_53"));
 
         gridLayout_5->addWidget(label_53, 0, 0, 1, 1);
 
-        lEdit_serial_set = new QLineEdit(layoutWidget12);
+        lEdit_serial_set = new QLineEdit(layoutWidget13);
         lEdit_serial_set->setObjectName(QString::fromUtf8("lEdit_serial_set"));
 
         gridLayout_5->addWidget(lEdit_serial_set, 0, 1, 1, 1);
 
-        btn_serial_set = new QPushButton(layoutWidget12);
+        btn_serial_set = new QPushButton(layoutWidget13);
         btn_serial_set->setObjectName(QString::fromUtf8("btn_serial_set"));
 
         gridLayout_5->addWidget(btn_serial_set, 0, 2, 1, 1);
 
-        label_54 = new QLabel(layoutWidget12);
+        label_54 = new QLabel(layoutWidget13);
         label_54->setObjectName(QString::fromUtf8("label_54"));
 
         gridLayout_5->addWidget(label_54, 1, 0, 1, 1);
 
-        lEdit_time_set = new QLineEdit(layoutWidget12);
+        lEdit_time_set = new QLineEdit(layoutWidget13);
         lEdit_time_set->setObjectName(QString::fromUtf8("lEdit_time_set"));
 
         gridLayout_5->addWidget(lEdit_time_set, 1, 1, 1, 1);
 
-        btn_time_set = new QPushButton(layoutWidget12);
+        btn_time_set = new QPushButton(layoutWidget13);
         btn_time_set->setObjectName(QString::fromUtf8("btn_time_set"));
 
         gridLayout_5->addWidget(btn_time_set, 1, 2, 1, 1);
 
-        label_55 = new QLabel(layoutWidget12);
+        label_55 = new QLabel(layoutWidget13);
         label_55->setObjectName(QString::fromUtf8("label_55"));
 
         gridLayout_5->addWidget(label_55, 2, 0, 1, 1);
 
-        lEdit_capacity_set = new QLineEdit(layoutWidget12);
+        lEdit_capacity_set = new QLineEdit(layoutWidget13);
         lEdit_capacity_set->setObjectName(QString::fromUtf8("lEdit_capacity_set"));
 
         gridLayout_5->addWidget(lEdit_capacity_set, 2, 1, 1, 1);
 
-        btn_capacity_set = new QPushButton(layoutWidget12);
+        btn_capacity_set = new QPushButton(layoutWidget13);
         btn_capacity_set->setObjectName(QString::fromUtf8("btn_capacity_set"));
 
         gridLayout_5->addWidget(btn_capacity_set, 2, 2, 1, 1);
 
-        label_111 = new QLabel(layoutWidget12);
+        label_111 = new QLabel(layoutWidget13);
         label_111->setObjectName(QString::fromUtf8("label_111"));
 
         gridLayout_5->addWidget(label_111, 3, 0, 1, 1);
 
-        lEdit_current_set = new QLineEdit(layoutWidget12);
+        lEdit_current_set = new QLineEdit(layoutWidget13);
         lEdit_current_set->setObjectName(QString::fromUtf8("lEdit_current_set"));
 
         gridLayout_5->addWidget(lEdit_current_set, 3, 1, 1, 1);
 
-        btn_current_set = new QPushButton(layoutWidget12);
+        btn_current_set = new QPushButton(layoutWidget13);
         btn_current_set->setObjectName(QString::fromUtf8("btn_current_set"));
 
         gridLayout_5->addWidget(btn_current_set, 3, 2, 1, 1);
@@ -1125,40 +1149,40 @@ public:
 
         gridLayout_12->addWidget(groupBox_3, 0, 1, 1, 1);
 
-        groupBox_4 = new QGroupBox(layoutWidget10);
+        groupBox_4 = new QGroupBox(layoutWidget11);
         groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
-        layoutWidget13 = new QWidget(groupBox_4);
-        layoutWidget13->setObjectName(QString::fromUtf8("layoutWidget13"));
-        layoutWidget13->setGeometry(QRect(20, 20, 261, 151));
-        gridLayout_7 = new QGridLayout(layoutWidget13);
+        layoutWidget14 = new QWidget(groupBox_4);
+        layoutWidget14->setObjectName(QString::fromUtf8("layoutWidget14"));
+        layoutWidget14->setGeometry(QRect(20, 20, 261, 151));
+        gridLayout_7 = new QGridLayout(layoutWidget14);
         gridLayout_7->setObjectName(QString::fromUtf8("gridLayout_7"));
         gridLayout_7->setContentsMargins(0, 0, 0, 0);
-        label_56 = new QLabel(layoutWidget13);
+        label_56 = new QLabel(layoutWidget14);
         label_56->setObjectName(QString::fromUtf8("label_56"));
 
         gridLayout_7->addWidget(label_56, 0, 0, 1, 1);
 
-        btn_serial_set_2 = new QPushButton(layoutWidget13);
+        btn_serial_set_2 = new QPushButton(layoutWidget14);
         btn_serial_set_2->setObjectName(QString::fromUtf8("btn_serial_set_2"));
 
         gridLayout_7->addWidget(btn_serial_set_2, 0, 1, 1, 1);
 
-        label_51 = new QLabel(layoutWidget13);
+        label_51 = new QLabel(layoutWidget14);
         label_51->setObjectName(QString::fromUtf8("label_51"));
 
         gridLayout_7->addWidget(label_51, 1, 0, 1, 1);
 
-        btn_low_power = new QPushButton(layoutWidget13);
+        btn_low_power = new QPushButton(layoutWidget14);
         btn_low_power->setObjectName(QString::fromUtf8("btn_low_power"));
 
         gridLayout_7->addWidget(btn_low_power, 1, 1, 1, 1);
 
-        label_52 = new QLabel(layoutWidget13);
+        label_52 = new QLabel(layoutWidget14);
         label_52->setObjectName(QString::fromUtf8("label_52"));
 
         gridLayout_7->addWidget(label_52, 2, 0, 1, 1);
 
-        btn_balanced = new QPushButton(layoutWidget13);
+        btn_balanced = new QPushButton(layoutWidget14);
         btn_balanced->setObjectName(QString::fromUtf8("btn_balanced"));
 
         gridLayout_7->addWidget(btn_balanced, 2, 1, 1, 1);
@@ -1171,131 +1195,219 @@ public:
         tab_2->setObjectName(QString::fromUtf8("tab_2"));
         groupBox = new QGroupBox(tab_2);
         groupBox->setObjectName(QString::fromUtf8("groupBox"));
-        groupBox->setGeometry(QRect(20, 30, 281, 381));
+        groupBox->setGeometry(QRect(20, 30, 471, 381));
         btn_voltage_calib_get = new QPushButton(groupBox);
         btn_voltage_calib_get->setObjectName(QString::fromUtf8("btn_voltage_calib_get"));
         btn_voltage_calib_get->setGeometry(QRect(190, 100, 75, 23));
-        layoutWidget14 = new QWidget(groupBox);
-        layoutWidget14->setObjectName(QString::fromUtf8("layoutWidget14"));
-        layoutWidget14->setGeometry(QRect(10, 40, 237, 50));
-        gridLayout_3 = new QGridLayout(layoutWidget14);
+        layoutWidget15 = new QWidget(groupBox);
+        layoutWidget15->setObjectName(QString::fromUtf8("layoutWidget15"));
+        layoutWidget15->setGeometry(QRect(10, 40, 237, 50));
+        gridLayout_3 = new QGridLayout(layoutWidget15);
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         gridLayout_3->setContentsMargins(0, 0, 0, 0);
-        label_27 = new QLabel(layoutWidget14);
+        label_27 = new QLabel(layoutWidget15);
         label_27->setObjectName(QString::fromUtf8("label_27"));
 
         gridLayout_3->addWidget(label_27, 0, 0, 1, 1);
 
-        lEdit_voltage_range = new QLineEdit(layoutWidget14);
+        lEdit_voltage_range = new QLineEdit(layoutWidget15);
         lEdit_voltage_range->setObjectName(QString::fromUtf8("lEdit_voltage_range"));
         lEdit_voltage_range->setReadOnly(true);
 
         gridLayout_3->addWidget(lEdit_voltage_range, 0, 1, 1, 1);
 
-        label_26 = new QLabel(layoutWidget14);
+        label_26 = new QLabel(layoutWidget15);
         label_26->setObjectName(QString::fromUtf8("label_26"));
 
         gridLayout_3->addWidget(label_26, 1, 0, 1, 1);
 
-        lEdit_voltage_zero = new QLineEdit(layoutWidget14);
+        lEdit_voltage_zero = new QLineEdit(layoutWidget15);
         lEdit_voltage_zero->setObjectName(QString::fromUtf8("lEdit_voltage_zero"));
         lEdit_voltage_zero->setReadOnly(true);
 
         gridLayout_3->addWidget(lEdit_voltage_zero, 1, 1, 1, 1);
 
-        layoutWidget_3 = new QWidget(groupBox);
-        layoutWidget_3->setObjectName(QString::fromUtf8("layoutWidget_3"));
-        layoutWidget_3->setGeometry(QRect(10, 130, 237, 50));
-        gridLayout_19 = new QGridLayout(layoutWidget_3);
-        gridLayout_19->setObjectName(QString::fromUtf8("gridLayout_19"));
-        gridLayout_19->setContentsMargins(0, 0, 0, 0);
-        label_59 = new QLabel(layoutWidget_3);
-        label_59->setObjectName(QString::fromUtf8("label_59"));
-
-        gridLayout_19->addWidget(label_59, 0, 0, 1, 1);
-
-        lEdit_co_k_calib = new QLineEdit(layoutWidget_3);
-        lEdit_co_k_calib->setObjectName(QString::fromUtf8("lEdit_co_k_calib"));
-        lEdit_co_k_calib->setReadOnly(true);
-
-        gridLayout_19->addWidget(lEdit_co_k_calib, 0, 1, 1, 1);
-
-        label_60 = new QLabel(layoutWidget_3);
-        label_60->setObjectName(QString::fromUtf8("label_60"));
-
-        gridLayout_19->addWidget(label_60, 1, 0, 1, 1);
-
-        lEdit_co_b_calib = new QLineEdit(layoutWidget_3);
-        lEdit_co_b_calib->setObjectName(QString::fromUtf8("lEdit_co_b_calib"));
-        lEdit_co_b_calib->setReadOnly(true);
-
-        gridLayout_19->addWidget(lEdit_co_b_calib, 1, 1, 1, 1);
-
-        layoutWidget_5 = new QWidget(groupBox);
-        layoutWidget_5->setObjectName(QString::fromUtf8("layoutWidget_5"));
-        layoutWidget_5->setGeometry(QRect(10, 220, 237, 50));
-        gridLayout_21 = new QGridLayout(layoutWidget_5);
+        widget = new QWidget(groupBox);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        widget->setGeometry(QRect(230, 160, 231, 211));
+        gridLayout_21 = new QGridLayout(widget);
         gridLayout_21->setObjectName(QString::fromUtf8("gridLayout_21"));
         gridLayout_21->setContentsMargins(0, 0, 0, 0);
-        label_63 = new QLabel(layoutWidget_5);
+        label_63 = new QLabel(widget);
         label_63->setObjectName(QString::fromUtf8("label_63"));
 
         gridLayout_21->addWidget(label_63, 0, 0, 1, 1);
 
-        lEdit_h2_k_calib = new QLineEdit(layoutWidget_5);
+        lEdit_h2_k_calib = new QLineEdit(widget);
         lEdit_h2_k_calib->setObjectName(QString::fromUtf8("lEdit_h2_k_calib"));
         lEdit_h2_k_calib->setReadOnly(true);
 
         gridLayout_21->addWidget(lEdit_h2_k_calib, 0, 1, 1, 1);
 
-        label_64 = new QLabel(layoutWidget_5);
+        label_64 = new QLabel(widget);
         label_64->setObjectName(QString::fromUtf8("label_64"));
 
         gridLayout_21->addWidget(label_64, 1, 0, 1, 1);
 
-        lEdit_h2_b_calib = new QLineEdit(layoutWidget_5);
+        lEdit_h2_b_calib = new QLineEdit(widget);
         lEdit_h2_b_calib->setObjectName(QString::fromUtf8("lEdit_h2_b_calib"));
         lEdit_h2_b_calib->setReadOnly(true);
 
         gridLayout_21->addWidget(lEdit_h2_b_calib, 1, 1, 1, 1);
 
+        label_69 = new QLabel(widget);
+        label_69->setObjectName(QString::fromUtf8("label_69"));
+
+        gridLayout_21->addWidget(label_69, 2, 0, 1, 1);
+
+        lEdit_h2_a1_calib = new QLineEdit(widget);
+        lEdit_h2_a1_calib->setObjectName(QString::fromUtf8("lEdit_h2_a1_calib"));
+        lEdit_h2_a1_calib->setReadOnly(true);
+
+        gridLayout_21->addWidget(lEdit_h2_a1_calib, 2, 1, 1, 1);
+
+        label_70 = new QLabel(widget);
+        label_70->setObjectName(QString::fromUtf8("label_70"));
+
+        gridLayout_21->addWidget(label_70, 3, 0, 1, 1);
+
+        lEdit_h2_a2_calib = new QLineEdit(widget);
+        lEdit_h2_a2_calib->setObjectName(QString::fromUtf8("lEdit_h2_a2_calib"));
+        lEdit_h2_a2_calib->setReadOnly(true);
+
+        gridLayout_21->addWidget(lEdit_h2_a2_calib, 3, 1, 1, 1);
+
+        label_71 = new QLabel(widget);
+        label_71->setObjectName(QString::fromUtf8("label_71"));
+
+        gridLayout_21->addWidget(label_71, 4, 0, 1, 1);
+
+        lEdit_h2_a3_calib = new QLineEdit(widget);
+        lEdit_h2_a3_calib->setObjectName(QString::fromUtf8("lEdit_h2_a3_calib"));
+        lEdit_h2_a3_calib->setReadOnly(true);
+
+        gridLayout_21->addWidget(lEdit_h2_a3_calib, 4, 1, 1, 1);
+
+        label_72 = new QLabel(widget);
+        label_72->setObjectName(QString::fromUtf8("label_72"));
+
+        gridLayout_21->addWidget(label_72, 5, 0, 1, 1);
+
+        lEdit_h2_a4_calib = new QLineEdit(widget);
+        lEdit_h2_a4_calib->setObjectName(QString::fromUtf8("lEdit_h2_a4_calib"));
+        lEdit_h2_a4_calib->setReadOnly(true);
+
+        gridLayout_21->addWidget(lEdit_h2_a4_calib, 5, 1, 1, 1);
+
+        widget1 = new QWidget(groupBox);
+        widget1->setObjectName(QString::fromUtf8("widget1"));
+        widget1->setGeometry(QRect(11, 168, 201, 201));
+        gridLayout_19 = new QGridLayout(widget1);
+        gridLayout_19->setObjectName(QString::fromUtf8("gridLayout_19"));
+        gridLayout_19->setContentsMargins(0, 0, 0, 0);
+        label_59 = new QLabel(widget1);
+        label_59->setObjectName(QString::fromUtf8("label_59"));
+
+        gridLayout_19->addWidget(label_59, 0, 0, 1, 1);
+
+        lEdit_co_k_calib = new QLineEdit(widget1);
+        lEdit_co_k_calib->setObjectName(QString::fromUtf8("lEdit_co_k_calib"));
+        lEdit_co_k_calib->setReadOnly(true);
+
+        gridLayout_19->addWidget(lEdit_co_k_calib, 0, 1, 1, 1);
+
+        label_60 = new QLabel(widget1);
+        label_60->setObjectName(QString::fromUtf8("label_60"));
+
+        gridLayout_19->addWidget(label_60, 1, 0, 1, 1);
+
+        lEdit_co_b_calib = new QLineEdit(widget1);
+        lEdit_co_b_calib->setObjectName(QString::fromUtf8("lEdit_co_b_calib"));
+        lEdit_co_b_calib->setReadOnly(true);
+
+        gridLayout_19->addWidget(lEdit_co_b_calib, 1, 1, 1, 1);
+
+        label_73 = new QLabel(widget1);
+        label_73->setObjectName(QString::fromUtf8("label_73"));
+
+        gridLayout_19->addWidget(label_73, 2, 0, 1, 1);
+
+        lEdit_co_a1_calib = new QLineEdit(widget1);
+        lEdit_co_a1_calib->setObjectName(QString::fromUtf8("lEdit_co_a1_calib"));
+        lEdit_co_a1_calib->setReadOnly(true);
+
+        gridLayout_19->addWidget(lEdit_co_a1_calib, 2, 1, 1, 1);
+
+        label_74 = new QLabel(widget1);
+        label_74->setObjectName(QString::fromUtf8("label_74"));
+
+        gridLayout_19->addWidget(label_74, 3, 0, 1, 1);
+
+        lEdit_co_a2_calib = new QLineEdit(widget1);
+        lEdit_co_a2_calib->setObjectName(QString::fromUtf8("lEdit_co_a2_calib"));
+        lEdit_co_a2_calib->setReadOnly(true);
+
+        gridLayout_19->addWidget(lEdit_co_a2_calib, 3, 1, 1, 1);
+
+        label_75 = new QLabel(widget1);
+        label_75->setObjectName(QString::fromUtf8("label_75"));
+
+        gridLayout_19->addWidget(label_75, 4, 0, 1, 1);
+
+        lEdit_co_a3_calib = new QLineEdit(widget1);
+        lEdit_co_a3_calib->setObjectName(QString::fromUtf8("lEdit_co_a3_calib"));
+        lEdit_co_a3_calib->setReadOnly(true);
+
+        gridLayout_19->addWidget(lEdit_co_a3_calib, 4, 1, 1, 1);
+
+        label_76 = new QLabel(widget1);
+        label_76->setObjectName(QString::fromUtf8("label_76"));
+
+        gridLayout_19->addWidget(label_76, 5, 0, 1, 1);
+
+        lEdit_co_a4_calib = new QLineEdit(widget1);
+        lEdit_co_a4_calib->setObjectName(QString::fromUtf8("lEdit_co_a4_calib"));
+        lEdit_co_a4_calib->setReadOnly(true);
+
+        gridLayout_19->addWidget(lEdit_co_a4_calib, 5, 1, 1, 1);
+
         groupBox_5 = new QGroupBox(tab_2);
         groupBox_5->setObjectName(QString::fromUtf8("groupBox_5"));
-        groupBox_5->setGeometry(QRect(380, 40, 341, 101));
-        layoutWidget15 = new QWidget(groupBox_5);
-        layoutWidget15->setObjectName(QString::fromUtf8("layoutWidget15"));
-        layoutWidget15->setGeometry(QRect(10, 30, 318, 52));
-        gridLayout_4 = new QGridLayout(layoutWidget15);
+        groupBox_5->setGeometry(QRect(520, 30, 341, 101));
+        layoutWidget16 = new QWidget(groupBox_5);
+        layoutWidget16->setObjectName(QString::fromUtf8("layoutWidget16"));
+        layoutWidget16->setGeometry(QRect(10, 30, 318, 52));
+        gridLayout_4 = new QGridLayout(layoutWidget16);
         gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
         gridLayout_4->setContentsMargins(0, 0, 0, 0);
-        label_24 = new QLabel(layoutWidget15);
+        label_24 = new QLabel(layoutWidget16);
         label_24->setObjectName(QString::fromUtf8("label_24"));
 
         gridLayout_4->addWidget(label_24, 0, 0, 1, 1);
 
-        lEdit_voltage_range_calib = new QLineEdit(layoutWidget15);
+        lEdit_voltage_range_calib = new QLineEdit(layoutWidget16);
         lEdit_voltage_range_calib->setObjectName(QString::fromUtf8("lEdit_voltage_range_calib"));
 
         gridLayout_4->addWidget(lEdit_voltage_range_calib, 0, 1, 1, 1);
 
-        label_25 = new QLabel(layoutWidget15);
+        label_25 = new QLabel(layoutWidget16);
         label_25->setObjectName(QString::fromUtf8("label_25"));
 
         gridLayout_4->addWidget(label_25, 1, 0, 1, 1);
 
-        lEdit_voltage_zero_calib = new QLineEdit(layoutWidget15);
+        lEdit_voltage_zero_calib = new QLineEdit(layoutWidget16);
         lEdit_voltage_zero_calib->setObjectName(QString::fromUtf8("lEdit_voltage_zero_calib"));
 
         gridLayout_4->addWidget(lEdit_voltage_zero_calib, 1, 1, 1, 1);
 
-        btn_voltage_calib_set = new QPushButton(layoutWidget15);
+        btn_voltage_calib_set = new QPushButton(layoutWidget16);
         btn_voltage_calib_set->setObjectName(QString::fromUtf8("btn_voltage_calib_set"));
 
         gridLayout_4->addWidget(btn_voltage_calib_set, 1, 2, 1, 1);
 
         groupBox_6 = new QGroupBox(tab_2);
         groupBox_6->setObjectName(QString::fromUtf8("groupBox_6"));
-        groupBox_6->setGeometry(QRect(380, 150, 341, 101));
+        groupBox_6->setGeometry(QRect(510, 140, 341, 101));
         layoutWidget_2 = new QWidget(groupBox_6);
         layoutWidget_2->setObjectName(QString::fromUtf8("layoutWidget_2"));
         layoutWidget_2->setGeometry(QRect(10, 30, 318, 52));
@@ -1329,37 +1441,77 @@ public:
 
         groupBox_7 = new QGroupBox(tab_2);
         groupBox_7->setObjectName(QString::fromUtf8("groupBox_7"));
-        groupBox_7->setGeometry(QRect(380, 270, 341, 101));
-        layoutWidget_4 = new QWidget(groupBox_7);
-        layoutWidget_4->setObjectName(QString::fromUtf8("layoutWidget_4"));
-        layoutWidget_4->setGeometry(QRect(10, 30, 318, 52));
-        gridLayout_20 = new QGridLayout(layoutWidget_4);
+        groupBox_7->setGeometry(QRect(510, 240, 341, 191));
+        widget2 = new QWidget(groupBox_7);
+        widget2->setObjectName(QString::fromUtf8("widget2"));
+        widget2->setGeometry(QRect(21, 21, 298, 160));
+        gridLayout_20 = new QGridLayout(widget2);
         gridLayout_20->setObjectName(QString::fromUtf8("gridLayout_20"));
         gridLayout_20->setContentsMargins(0, 0, 0, 0);
-        label_61 = new QLabel(layoutWidget_4);
+        label_61 = new QLabel(widget2);
         label_61->setObjectName(QString::fromUtf8("label_61"));
 
         gridLayout_20->addWidget(label_61, 0, 0, 1, 1);
 
-        lEdit_h2_k_calib_set = new QLineEdit(layoutWidget_4);
+        lEdit_h2_k_calib_set = new QLineEdit(widget2);
         lEdit_h2_k_calib_set->setObjectName(QString::fromUtf8("lEdit_h2_k_calib_set"));
 
         gridLayout_20->addWidget(lEdit_h2_k_calib_set, 0, 1, 1, 1);
 
-        label_62 = new QLabel(layoutWidget_4);
+        label_62 = new QLabel(widget2);
         label_62->setObjectName(QString::fromUtf8("label_62"));
 
         gridLayout_20->addWidget(label_62, 1, 0, 1, 1);
 
-        lEdit_h2_b_calib_set = new QLineEdit(layoutWidget_4);
+        lEdit_h2_b_calib_set = new QLineEdit(widget2);
         lEdit_h2_b_calib_set->setObjectName(QString::fromUtf8("lEdit_h2_b_calib_set"));
 
         gridLayout_20->addWidget(lEdit_h2_b_calib_set, 1, 1, 1, 1);
 
-        btn_h2_calib_set = new QPushButton(layoutWidget_4);
+        label_65 = new QLabel(widget2);
+        label_65->setObjectName(QString::fromUtf8("label_65"));
+
+        gridLayout_20->addWidget(label_65, 2, 0, 1, 1);
+
+        lEdit_h2_a1_calib_set = new QLineEdit(widget2);
+        lEdit_h2_a1_calib_set->setObjectName(QString::fromUtf8("lEdit_h2_a1_calib_set"));
+
+        gridLayout_20->addWidget(lEdit_h2_a1_calib_set, 2, 1, 1, 1);
+
+        label_66 = new QLabel(widget2);
+        label_66->setObjectName(QString::fromUtf8("label_66"));
+
+        gridLayout_20->addWidget(label_66, 3, 0, 1, 1);
+
+        lEdit_h2_a2_calib_set = new QLineEdit(widget2);
+        lEdit_h2_a2_calib_set->setObjectName(QString::fromUtf8("lEdit_h2_a2_calib_set"));
+
+        gridLayout_20->addWidget(lEdit_h2_a2_calib_set, 3, 1, 1, 1);
+
+        label_67 = new QLabel(widget2);
+        label_67->setObjectName(QString::fromUtf8("label_67"));
+
+        gridLayout_20->addWidget(label_67, 4, 0, 1, 1);
+
+        lEdit_h2_a3_calib_set = new QLineEdit(widget2);
+        lEdit_h2_a3_calib_set->setObjectName(QString::fromUtf8("lEdit_h2_a3_calib_set"));
+
+        gridLayout_20->addWidget(lEdit_h2_a3_calib_set, 4, 1, 1, 1);
+
+        label_68 = new QLabel(widget2);
+        label_68->setObjectName(QString::fromUtf8("label_68"));
+
+        gridLayout_20->addWidget(label_68, 5, 0, 1, 1);
+
+        lEdit_h2_a4_calib_set = new QLineEdit(widget2);
+        lEdit_h2_a4_calib_set->setObjectName(QString::fromUtf8("lEdit_h2_a4_calib_set"));
+
+        gridLayout_20->addWidget(lEdit_h2_a4_calib_set, 5, 1, 1, 1);
+
+        btn_h2_calib_set = new QPushButton(widget2);
         btn_h2_calib_set->setObjectName(QString::fromUtf8("btn_h2_calib_set"));
 
-        gridLayout_20->addWidget(btn_h2_calib_set, 1, 2, 1, 1);
+        gridLayout_20->addWidget(btn_h2_calib_set, 5, 2, 1, 1);
 
         tabWidget->addTab(tab_2, QString());
         cbox_modbus_addr = new QComboBox(centralwidget);
@@ -1496,10 +1648,18 @@ public:
         btn_voltage_calib_get->setText(QCoreApplication::translate("MainWindow", "\350\216\267\345\217\226", nullptr));
         label_27->setText(QCoreApplication::translate("MainWindow", "\347\224\265\345\216\213\351\207\217\347\250\213\346\240\241\345\207\206\347\263\273\346\225\260", nullptr));
         label_26->setText(QCoreApplication::translate("MainWindow", "\347\224\265\345\216\213\351\233\266\347\202\271\346\240\241\345\207\206\347\263\273\346\225\260", nullptr));
-        label_59->setText(QCoreApplication::translate("MainWindow", "CO\346\240\241\345\207\206\347\263\273\346\225\260 k", nullptr));
-        label_60->setText(QCoreApplication::translate("MainWindow", "CO\346\240\241\345\207\206\347\263\273\346\225\260 b", nullptr));
         label_63->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 k", nullptr));
         label_64->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 b", nullptr));
+        label_69->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 a1", nullptr));
+        label_70->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 a2", nullptr));
+        label_71->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 a3", nullptr));
+        label_72->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 a4", nullptr));
+        label_59->setText(QCoreApplication::translate("MainWindow", "CO\346\240\241\345\207\206\347\263\273\346\225\260 k", nullptr));
+        label_60->setText(QCoreApplication::translate("MainWindow", "CO\346\240\241\345\207\206\347\263\273\346\225\260 b", nullptr));
+        label_73->setText(QCoreApplication::translate("MainWindow", "CO\346\240\241\345\207\206\347\263\273\346\225\260 a1", nullptr));
+        label_74->setText(QCoreApplication::translate("MainWindow", "CO\346\240\241\345\207\206\347\263\273\346\225\260 a2", nullptr));
+        label_75->setText(QCoreApplication::translate("MainWindow", "CO\346\240\241\345\207\206\347\263\273\346\225\260 a3", nullptr));
+        label_76->setText(QCoreApplication::translate("MainWindow", "CO\346\240\241\345\207\206\347\263\273\346\225\260 a4", nullptr));
         groupBox_5->setTitle(QCoreApplication::translate("MainWindow", "\347\224\265\345\216\213\346\240\241\345\207\206\347\263\273\346\225\260", nullptr));
         label_24->setText(QCoreApplication::translate("MainWindow", "\347\224\265\345\216\213\351\207\217\347\250\213\346\240\241\345\207\206\347\263\273\346\225\260", nullptr));
         label_25->setText(QCoreApplication::translate("MainWindow", "\347\224\265\345\216\213\351\233\266\347\202\271\346\240\241\345\207\206\347\263\273\346\225\260", nullptr));
@@ -1511,6 +1671,10 @@ public:
         groupBox_7->setTitle(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260", nullptr));
         label_61->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 k", nullptr));
         label_62->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 b", nullptr));
+        label_65->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 a1", nullptr));
+        label_66->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 a2", nullptr));
+        label_67->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 a3", nullptr));
+        label_68->setText(QCoreApplication::translate("MainWindow", "H2\346\240\241\345\207\206\347\263\273\346\225\260 a4", nullptr));
         btn_h2_calib_set->setText(QCoreApplication::translate("MainWindow", "\350\256\276\347\275\256", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "\346\240\241\345\207\206", nullptr));
         btn_net_init->setText(QCoreApplication::translate("MainWindow", "\350\256\276\345\244\207\350\216\267\345\217\226", nullptr));

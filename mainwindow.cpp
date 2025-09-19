@@ -25,6 +25,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_param_event = 0;
     m_balance_flag = 0;
 
+    setWindowFlags(Qt::Window | Qt::WindowTitleHint |
+                   Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
+
     ui->progressBar->setValue(0); // 初始化进度条为0
 
     connect(serialPort, &QSerialPort::readyRead, this, &MainWindow::readSerialData);
@@ -382,7 +385,8 @@ void MainWindow::run_process_init_handler(void)
         quint16 read_bytes = myserial->myserialport_receiveData(read_data,sizeof(read_data));
         if(read_bytes > 0){
             if(read_data[0] == i && read_data[1] == cmd && (read_data[2]<<8|read_data[3]) == 0x02){
-                modbusAddrList.push_back(read_data[4]<<8|read_data[5]);
+                // modbusAddrList.push_back(read_data[4]<<8|read_data[5]);
+                 modbusAddrList.push_back(i);
                 // modbusAddrList.push_back(i);
             }else{
                 qDebug()<<"设备"<<QString::number(i)<<"数据格式错误";
@@ -712,8 +716,8 @@ void MainWindow::run_process_get_data_handler(void)
                 ui->lEdit_res->setText(QString::number((read_data[12]<<8|read_data[13])*1.0/100));
             }
             ui->lEdit_battery_temperature->setText(QString::number((read_data[14]<<8|read_data[15])*1.0/100));
-            ui->lEdit_CO->setText(QString::number((read_data[16]<<8|read_data[17])*1.0/100));
-            ui->lEdit_H2->setText(QString::number((read_data[18]<<8|read_data[19])*1.0/100));
+            ui->lEdit_CO->setText(QString::number((read_data[16]<<8|read_data[17])*1.0));
+            ui->lEdit_H2->setText(QString::number((read_data[18]<<8|read_data[19])*1.0));
             ui->lEdit_SMK->setText(QString::number(read_data[20]<<8|read_data[21]));
             ui->lEdit_env_temperature->setText(QString::number((read_data[22]<<8|read_data[23])*1.0/100));
             ui->lEdit_humidity->setText(QString::number((read_data[24]<<8|read_data[25])*1.0/100));
@@ -1080,8 +1084,8 @@ void MainWindow::device_co_calibration_set(void)
 
 void MainWindow::device_h2_calibration_set(void)
 {
-    quint8 data[16] = {0},cmd = 0x10;
-    quint16 set_reg_addr = 0x4009,set_reg_num = 0x04,crc = 0;
+    quint8 data[32] = {0},cmd = 0x10;
+    quint16 set_reg_addr = 0x4011,set_reg_num = 0x0C,crc = 0;
     // quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
@@ -1100,36 +1104,27 @@ void MainWindow::device_h2_calibration_set(void)
     data[4] = set_reg_num>>8;
     data[5] = set_reg_num&0xff;
 
-    u8_float_t h2_k,h2_b;
-    ok = false;
-    str_id = ui->lEdit_h2_k_calib_set->text();
-    h2_k.f_data = str_id.toFloat(&ok);
-    if(ok){
-
-    }else{
-        h2_k.f_data = 1.0;
+    u8_float_t h2_k,h2_b,h2_a1,h2_a2,h2_a3,h2_a4;
+    u8_float_t h2[6];
+    QList<QLineEdit *> lineEdit = { ui->lEdit_h2_k_calib_set,ui->lEdit_h2_b_calib_set,
+                                    ui->lEdit_h2_a1_calib_set,ui->lEdit_h2_a2_calib_set,
+                                    ui->lEdit_h2_a3_calib_set,ui->lEdit_h2_a4_calib_set};
+    for(int i=0;i<6;i++){
+        ok = false;
+        str_id = lineEdit[i]->text();
+        h2[i].f_data = str_id.toFloat(&ok);
+        if(ok){;}else{
+            h2[i].f_data = 1.0;
+        }
+        data[6+(4*i+0)] =  h2[i].u8_data[3];
+        data[6+(4*i+1)] =  h2[i].u8_data[2];
+        data[6+(4*i+2)] =  h2[i].u8_data[1];
+        data[6+(4*i+3)] =  h2[i].u8_data[0];
     }
-    ok = false;
-    str_id = ui->lEdit_h2_b_calib_set->text();
-    h2_b.f_data = str_id.toFloat(&ok);
-    if(ok){
 
-    }else{
-        h2_b.f_data = 1.0;
-    }
-    data[6] =  h2_k.u8_data[3];
-    data[7] =  h2_k.u8_data[2];
-    data[8] =  h2_k.u8_data[1];
-    data[9] =  h2_k.u8_data[0];
-
-    data[10] =  h2_b.u8_data[3];
-    data[11] =  h2_b.u8_data[2];
-    data[12] =  h2_b.u8_data[1];
-    data[13] =  h2_b.u8_data[0];
-
-    crc = modbus_calculate_crc(data,14);
-    data[14] = crc&0xff;
-    data[15] = crc>>8;
+    crc = modbus_calculate_crc(data,30);
+    data[30] = crc&0xff;
+    data[31] = crc>>8;
 
 
     myserial->myserialport_sendData(data,sizeof(data));
@@ -1184,7 +1179,7 @@ void MainWindow::run_process_set_param_handler(void)
 void MainWindow::run_process_get_param_handler(void)
 {
     quint8 data[8] = {0},cmd = 0x03;
-    quint16 read_reg_addr = 0x4000,read_reg_num = 0x0D,crc = 0;
+    quint16 read_reg_addr = 0x4000,read_reg_num = 0x1D,crc = 0;
     quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
@@ -1216,39 +1211,18 @@ void MainWindow::run_process_get_param_handler(void)
     read_bytes = myserial->myserialport_receiveData(read_data,sizeof(read_data));
     if(read_bytes > 0){
         if(read_data[0] == id && read_data[1] == cmd && (read_data[2]<<8|read_data[3]) == read_reg_num*2){
-            u8_float_t voltage_range,voltage_zero,co_k,co_b,h2_k,h2_b;
-            voltage_zero.u8_data[0] = read_data[9];
-            voltage_zero.u8_data[1] = read_data[8];
-            voltage_zero.u8_data[2] = read_data[7];
-            voltage_zero.u8_data[3] = read_data[6];
-            voltage_range.u8_data[0] = read_data[13];
-            voltage_range.u8_data[1] = read_data[12];
-            voltage_range.u8_data[2] = read_data[11];
-            voltage_range.u8_data[3] = read_data[10];
-            co_k.u8_data[0] = read_data[17];
-            co_k.u8_data[1] = read_data[16];
-            co_k.u8_data[2] = read_data[15];
-            co_k.u8_data[3] = read_data[14];
-            co_b.u8_data[0] = read_data[21];
-            co_b.u8_data[1] = read_data[20];
-            co_b.u8_data[2] = read_data[19];
-            co_b.u8_data[3] = read_data[18];
-            h2_k.u8_data[0] = read_data[25];
-            h2_k.u8_data[1] = read_data[24];
-            h2_k.u8_data[2] = read_data[23];
-            h2_k.u8_data[3] = read_data[22];
-            h2_b.u8_data[0] = read_data[29];
-            h2_b.u8_data[1] = read_data[28];
-            h2_b.u8_data[2] = read_data[27];
-            h2_b.u8_data[3] = read_data[26];
-
-
-            ui->lEdit_voltage_range->setText(QString::number(voltage_range.f_data));
-            ui->lEdit_voltage_zero->setText(QString::number(voltage_zero.f_data));
-            ui->lEdit_co_k_calib->setText(QString::number(co_k.f_data));
-            ui->lEdit_co_b_calib->setText(QString::number(co_b.f_data));
-            ui->lEdit_h2_k_calib->setText(QString::number(h2_k.f_data));
-            ui->lEdit_h2_b_calib->setText(QString::number(h2_b.f_data));
+            u8_float_t calibretion[14];
+            QList<QLineEdit *> lineEdit = { ui->lEdit_voltage_zero,ui->lEdit_voltage_range,ui->lEdit_co_k_calib,ui->lEdit_co_b_calib,
+                                            ui->lEdit_co_a1_calib,ui->lEdit_co_a2_calib,ui->lEdit_co_a3_calib,ui->lEdit_co_a4_calib,
+                                            ui->lEdit_h2_k_calib,ui->lEdit_h2_b_calib,ui->lEdit_h2_a1_calib,ui->lEdit_h2_a2_calib,
+                                            ui->lEdit_h2_a3_calib,ui->lEdit_h2_a4_calib};
+            for(int i=0;i<14;i++){
+                calibretion[i].u8_data[0] = read_data[6+4*i+3];
+                calibretion[i].u8_data[1] = read_data[6+4*i+2];
+                calibretion[i].u8_data[2] = read_data[6+4*i+1];
+                calibretion[i].u8_data[3] = read_data[6+4*i+0];
+                lineEdit[i]->setText(QString::number(calibretion[i].f_data,'f',7));
+            }
         }else{
             qDebug()<<"info msg error";
         }
@@ -1387,5 +1361,11 @@ void MainWindow::on_btn_h2_calib_set_clicked()
 {
     m_param_event |= PARAM_EVENT_SET_H2_CALIB;
     m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
+}
+
+
+void MainWindow::on_openButton_clicked()
+{
+
 }
 
