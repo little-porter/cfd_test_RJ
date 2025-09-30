@@ -23,7 +23,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_run_process = RUN_PROCESS_INIT;
     m_run_event = 0;
     m_param_event = 0;
+    m_get_param_event = 0;
     m_balance_flag = 0;
+    autoOpenFlag = false;
 
     setWindowFlags(Qt::Window | Qt::WindowTitleHint |
                    Qt::WindowMinimizeButtonHint | Qt::WindowCloseButtonHint);
@@ -175,7 +177,7 @@ void MainWindow::onCloseSerialPort()
     myserial = nullptr;
 }
 
-typedef alignas(1) struct _ota_msg
+alignas(1) typedef struct _ota_msg
 {
     quint8 dev_addr;
     quint8 cmd;
@@ -362,20 +364,16 @@ void MainWindow::project_event_handler(void)
 
 void MainWindow::run_process_init_handler(void)
 {
-    quint8 data[8] = {0},cmd = 0x03;
+    quint8 cmd = 0x03,data[8] = {0x00,cmd,0x00,0x00,0x00,0x01,0x00,0x00};
     quint16 crc = 0;
     quint8  read_data[100] = {0};
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
-    data[1] = cmd;
-    data[2] = 0x00;
-    data[3] = 0x00;
-    data[4] = 0x00;
-    data[5] = 0x01;
+
     if(!modbusAddrList.empty()){
         modbusAddrList.clear();
     }
 
-    for(quint8 i = 0; i<255; i++){
+    for(quint8 i = 0; i<100; i++){
         data[0] = i;
         crc = modbus_calculate_crc(data,6);
         data[6] = crc&0xff;
@@ -402,38 +400,82 @@ void MainWindow::run_process_init_handler(void)
     ui->cbox_modbus_addr->setCurrentIndex(0);
 }
 
+quint8 MainWindow::device_id_get(void)
+{
+    bool ok = false;
+    QString str_id = ui->cbox_modbus_addr->currentText();
+    quint8 id = (quint8)str_id.toUInt(&ok,10);
+    if(!ok){
+        id = 0;
+        qDebug()<<"地址转换失败,返回默认地址0";
+    }else{;}
+    return id;
+}
+
+bool MainWindow::device_reg_data_read(quint16 reg_addr,quint16 reg_num,quint8 cmd,quint8 id)
+{
+    bool ret = true;
+    quint8 data[8] = {0};
+    quint16 crc;
+    data[0] = id;
+    data[1] = cmd;
+    data[2] = reg_addr>>8;
+    data[3] = reg_addr&0xff;
+    data[4] = reg_num>>8;
+    data[5] = reg_num&0xff;
+    crc = modbus_calculate_crc(data,6);
+    data[6] = crc&0xff;
+    data[7] = crc>>8;
+
+    myserial->myserialport_sendData(data,sizeof(data));
+    return ret;
+}
+
+bool MainWindow::device_reg_data_write(quint16 reg_addr,quint16 reg_num,quint8 cmd,quint8 *payload)
+{
+    bool ret;
+    quint16 size = 8 + reg_num*2;
+    quint8 *data = (quint8 *)calloc(1,size);
+    quint16 crc = 0;
+    if(!(data[0] = device_id_get())){
+        free(data);
+        return ret;
+    }else{;}
+    data[1] = cmd;
+    data[2] = reg_addr>>8;
+    data[3] = reg_addr&0xff;
+    data[4] = reg_num>>8;
+    data[5] = reg_num&0xff;
+    memcpy(&data[6],payload,reg_num*2);
+    crc = modbus_calculate_crc(data,size-2);
+    data[size-2] = crc&0xff;
+    data[size-1] = crc>>8;
+
+    myserial->myserialport_sendData(data,size);
+    free(data);
+    ret = true;
+    return ret;
+}
+
 /*****************************************************************************
  * 获取设备信息，软件版本，阈值信息
  *
  * ***************************************************************************/
 void MainWindow::device_config_info_get(void)
 {
-    quint8 data[8] = {0},cmd = 0x03;
-    quint16 read_reg_addr = 0x0000,read_reg_num = 0x1E,crc = 0;
+    quint8  cmd = 0x03,id = 0x00;
+    quint16 read_reg_addr = 0x0000,read_reg_num = 0x1E;
     quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
 
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    bool ok = false;
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
+    if(!(id = device_id_get())){
+        qDebug()<<"[device read config info] cmd not send!";
         return;
-    }
-    data[1] = cmd;
-    data[2] = read_reg_addr>>8;
-    data[3] = read_reg_addr&0xff;
-    data[4] = read_reg_num>>8;
-    data[5] = read_reg_num&0xff;
-    crc = modbus_calculate_crc(data,6);
-    data[6] = crc&0xff;
-    data[7] = crc>>8;
+    }else{;}
 
-
-    myserial->myserialport_sendData(data,sizeof(data));
+    qDebug()<<"[device read config info]"<<"reg_addr = "<<Qt::hex<<read_reg_addr<<"reg_num = "<<read_reg_num;
+    device_reg_data_read(read_reg_addr,read_reg_num,cmd,id);
 
     delay(200);
 
@@ -453,40 +495,28 @@ void MainWindow::device_config_info_get(void)
             ui->lEdit_discharge_th->setText(QString::number(read_data[46+4]<<8|read_data[47+4]));
             ui->lEdit_charge_th->setText(QString::number(read_data[48+4]<<8|read_data[49+4]));
         }else{
-            qDebug()<<"info msg error";
+            qDebug()<<"config info msg check error!";
         }
     }else{
-        qDebug()<<"设备未应答";
+        qDebug()<<"device not respond!";
     }
 }
 
 void MainWindow::device_version_mac_info_get(void)
 {
-    quint8 data[8] = {0},cmd = 0x03;
-    quint16 read_reg_addr = 0x3000,read_reg_num = 0x0015,crc = 0;
+    quint8  cmd = 0x03,id = 0x00;
+    quint16 read_reg_addr = 0x3000,read_reg_num = 0x0015;
     quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
 
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    bool ok = false;
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
+    if(!(id = device_id_get())){
+        qDebug()<<"[device read version mac info] cmd not send!";
         return;
-    }
-    data[1] = cmd;
-    data[2] = read_reg_addr>>8;
-    data[3] = read_reg_addr&0xff;
-    data[4] = read_reg_num>>8;
-    data[5] = read_reg_num&0xff;
-    crc = modbus_calculate_crc(data,6);
-    data[6] = crc&0xff;
-    data[7] = crc>>8;
+    }else{;}
 
-    myserial->myserialport_sendData(data,sizeof(data));
+    qDebug()<<"[device read version mac info]"<<"reg_addr = "<<Qt::hex<<read_reg_addr<<"reg_num = "<<read_reg_num;
+    device_reg_data_read(read_reg_addr,read_reg_num,cmd,id);
 
     delay(200);
     read_bytes = myserial->myserialport_receiveData(read_data,sizeof(read_data));
@@ -506,10 +536,10 @@ void MainWindow::device_version_mac_info_get(void)
                                                  +QString::number(read_data[26]<<8|read_data[27]));
             ui->lEdit_mac->setText(QString::fromUtf8((char *)&read_data[24+4]));
         }else{
-            qDebug()<<"info msg error";
+            qDebug()<<"version mac info msg check error!";
         }
     }else{
-        qDebug()<<"设备未应答";
+        qDebug()<<"device not respond!";
     }
 }
 
@@ -542,44 +572,23 @@ void set_led_off(QLabel *label)
 
 void MainWindow::run_process_get_result_handler(void)
 {
-    quint8 data[8] = {0},cmd = 0x03;
-    quint16 read_reg_addr = 0x2000,read_reg_num = 0x0F,crc = 0;
+    quint8  cmd = 0x03,id = 0x00;
+    quint16 read_reg_addr = 0x2000,read_reg_num = 0x0F;
     quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
 
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    bool ok = false;
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
+    if(!(id = device_id_get())){
+        qDebug()<<"[device read result info] cmd not send!";
         return;
-    }
-    data[1] = cmd;
-    data[2] = read_reg_addr>>8;
-    data[3] = read_reg_addr&0xff;
-    data[4] = read_reg_num>>8;
-    data[5] = read_reg_num&0xff;
-    crc = modbus_calculate_crc(data,6);
-    data[6] = crc&0xff;
-    data[7] = crc>>8;
+    }else{;}
 
 
-    myserial->myserialport_sendData(data,sizeof(data));
+    qDebug()<<"[device read result info]"<<"reg_addr = "<<Qt::hex<<read_reg_addr<<"reg_num = "<<read_reg_num;
+    device_reg_data_read(read_reg_addr,read_reg_num,cmd,id);
 
     delay(100);
-
-    // indicatorLabel->setStyleSheet(
-    //     "QLabel {"
-    //     "  background-color: red;"
-    //     "  border: 2px solid black;"
-    //     "  border-radius: 15px;" // 半径是宽度/高度的一半
-    //     "  qproperty-alignment: AlignCenter;" // 如果需要显示文字，居中
-    //     "}"
-    //     );
 
     read_bytes = myserial->myserialport_receiveData(read_data,sizeof(read_data));
     if(read_bytes > 0){
@@ -651,10 +660,10 @@ void MainWindow::run_process_get_result_handler(void)
             }
 
         }else{
-            qDebug()<<"info msg error";
+            qDebug()<<"result info msg check error!";
         }
     }else{
-        qDebug()<<"设备未应答";
+        qDebug()<<"device not respond!";
     }
 }
 
@@ -662,33 +671,20 @@ void MainWindow::run_process_get_result_handler(void)
 
 void MainWindow::run_process_get_data_handler(void)
 {
-    quint8 data[8] = {0},cmd = 0x03;
-    quint16 read_reg_addr = 0x1000,read_reg_num = 0x0B,crc = 0;
+    quint8  cmd = 0x03,id = 0x00;
+    quint16 read_reg_addr = 0x1000,read_reg_num = 0x14,crc = 0;
     quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
 
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    bool ok = false;
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
+    if(!(id = device_id_get())){
+        qDebug()<<"[device read data info] cmd not send!";
         return;
-    }
-    data[1] = cmd;
-    data[2] = read_reg_addr>>8;
-    data[3] = read_reg_addr&0xff;
-    data[4] = read_reg_num>>8;
-    data[5] = read_reg_num&0xff;
-    crc = modbus_calculate_crc(data,6);
-    data[6] = crc&0xff;
-    data[7] = crc>>8;
+    }else{;}
 
-
-    myserial->myserialport_sendData(data,sizeof(data));
+    device_reg_data_read(read_reg_addr,read_reg_num,cmd,id);
+    qDebug()<<"[device read data info]"<<"reg_addr = "<<Qt::hex<<read_reg_addr<<"reg_num = "<<read_reg_num;
 
     delay(100);
 
@@ -696,6 +692,24 @@ void MainWindow::run_process_get_data_handler(void)
     if(read_bytes > 0){
         if(read_data[0] == id && read_data[1] == cmd && (read_data[2]<<8|read_data[3]) == read_reg_num*2){
             // quint16 u_current = read_data[4]<<8|read_data[5];
+            // qint16 data[19] = {0};
+            // float  fdata[19] = {0};
+            // quint8 *pdata = (quint8 *)data;
+            // memcpy(data,&read_data[4],38);
+            // for(int i=0; i<19;i++){
+            //     quint8 temp = 0;
+            //     temp = pdata[2*i];
+            //     pdata[2*i] = pdata[2*i+1];
+            //     pdata[2*i+1] = temp;
+            // }
+
+            // QList<QLineEdit *> lineEdit = { ui->lEdit_current,ui->lEdit_cycle,ui->lEdit_cfdzt,ui->lEdit_voltage,ui->lEdit_res,
+            //                                 ui->lEdit_battery_temperature,ui->lEdit_CO,ui->lEdit_H2,ui->lEdit_SMK,ui->lEdit_env_temperature,
+            //                                 ui->lEdit_humidity,ui->lEdit_heart,
+            //                                 ui->lEdit_voltage_real,ui->lEdit_res_real,ui->lEdit_battery_temperature_real,ui->lEdit_CO_real,ui->lEdit_H2_real,
+            //                                ui->lEdit_SMK_real,ui->lEdit_env_temperature_real};
+
+
             qint16 current = 0;
             memcpy(&current,&read_data[4],2);
             // current = (current>>8)|((current&0xFF)<<8);
@@ -708,7 +722,6 @@ void MainWindow::run_process_get_data_handler(void)
             quint16 u_voltage = read_data[10]<<8|read_data[11];
             qint16 voltage = 0;
             memcpy(&voltage,&u_voltage,sizeof(quint16));
-            // ui->lEdit_voltage->setText(QString::number((read_data[10]<<8|read_data[11])*1.0/1000));
                ui->lEdit_voltage->setText(QString::number(voltage*1.0/1000));
             if((read_data[12]<<8|read_data[13]) == 0xFFFF){
                 ui->lEdit_res->setText("oL");
@@ -721,11 +734,25 @@ void MainWindow::run_process_get_data_handler(void)
             ui->lEdit_SMK->setText(QString::number(read_data[20]<<8|read_data[21]));
             ui->lEdit_env_temperature->setText(QString::number((read_data[22]<<8|read_data[23])*1.0/100));
             ui->lEdit_humidity->setText(QString::number((read_data[24]<<8|read_data[25])*1.0/100));
+
+            ui->lEdit_heart->setText(QString::number((read_data[26]<<8|read_data[27])));
+
+            u_voltage = read_data[28]<<8|read_data[29];
+            memcpy(&voltage,&u_voltage,sizeof(quint16));
+            ui->lEdit_voltage_real->setText(QString::number(voltage*1.0/1000));
+
+            ui->lEdit_res_real->setText(QString::number((read_data[30]<<8|read_data[31])*1.0/100));
+            ui->lEdit_battery_temperature_real->setText(QString::number((read_data[32]<<8|read_data[33])*1.0/100));
+            ui->lEdit_CO_real->setText(QString::number((read_data[34]<<8|read_data[35])*1.0));
+            ui->lEdit_H2_real->setText(QString::number((read_data[36]<<8|read_data[37])*1.0));
+            ui->lEdit_SMK_real->setText(QString::number(read_data[38]<<8|read_data[39]));
+            ui->lEdit_env_temperature_real->setText(QString::number((read_data[40]<<8|read_data[41])*1.0/100));
+            ui->lEdit_humidity_real->setText(QString::number((read_data[42]<<8|read_data[43])*1.0/100));
         }else{
-            qDebug()<<"info msg error";
+            qDebug()<<"data info msg check error!";
         }
     }else{
-        qDebug()<<"设备未应答";
+        qDebug()<<"device not respond!";
     }
 
 }
@@ -737,25 +764,10 @@ void MainWindow::run_process_upgrade_handler(void)
 
 void MainWindow::device_alarm_threshold_set(void)
 {
-    quint8 data[24] = {0},cmd = 0x10;
+    quint8  data[24] = {0},cmd = 0x10;
     quint16 set_reg_addr = 0x0011,set_reg_num = 0x08,crc = 0;
     // quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
-
-    bool ok = false;
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
-        return;
-    }
-    data[1] = cmd;
-    data[2] = set_reg_addr>>8;
-    data[3] = set_reg_addr&0xff;
-    data[4] = set_reg_num>>8;
-    data[5] = set_reg_num&0xff;
 
     QList<QLineEdit *> lineEdit = {ui->lEdit_h2_th_set,ui->lEdit_co_th_set,ui->lEdit_temp_th_set,
                                     ui->lEdit_temp_ratio_th_set,ui->lEdit_voltage_high_th_set,
@@ -763,21 +775,22 @@ void MainWindow::device_alarm_threshold_set(void)
                                     ui->lEdit_charge_th_set};
     for(int i=0;i<lineEdit.size();++i){
         uint16_t value = 0;
-        ok = false;
-        str_id = lineEdit[i]->text();
+        bool ok = false;
+        QString str_id = lineEdit[i]->text();
         value = (quint16)str_id.toUInt(&ok,10);
         if(ok){
-            data[6+2*i] =  value>>8;
-            data[6+2*i+1] =  value&0xFF;
+            data[2*i] =  value>>8;
+            data[2*i+1] =  value&0xFF;
         }else{;}
     }
 
-    crc = modbus_calculate_crc(data,22);
-    data[22] = crc&0xff;
-    data[23] = crc>>8;
 
-
-    myserial->myserialport_sendData(data,sizeof(data));
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set threshold info] cmd not send!";
+        return;
+    }else{
+        qDebug()<<"[device set threshold info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
+    }
 
     delay(20);
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
@@ -786,42 +799,25 @@ void MainWindow::device_alarm_threshold_set(void)
 void MainWindow::device_serial_set(void)
 {
     quint8 data[28] = {0},cmd = 0x10;
-    quint16 set_reg_addr = 0x0007,set_reg_num = 0x0A,crc = 0;
+    quint16 set_reg_addr = 0x0007,set_reg_num = 0x0A;
     // quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
     bool ok = false;
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
-        return;
-    }
-    data[1] = cmd;
-    data[2] = set_reg_addr>>8;
-    data[3] = set_reg_addr&0xff;
-    data[4] = set_reg_num>>8;
-    data[5] = set_reg_num&0xff;
-
-    uint16_t value = 0;
-    ok = false;
-    str_id = ui->lEdit_serial_set->text();
+    QString str_id = ui->lEdit_serial_set->text();
     str_id = str_id.left(16);
     QByteArray utf8Data;
     if(str_id.length()>0){
         utf8Data = str_id.toUtf8();
-        memcpy(&data[6],utf8Data.constData(),utf8Data.size());
+        memcpy(&data[0],utf8Data.constData(),utf8Data.size());
+    }else{;}
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set serial info] cmd not send!";
+        return;
+    }else{
+        qDebug()<<"[device set serial info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
     }
-
-
-    crc = modbus_calculate_crc(data,26);
-    data[26] = crc&0xff;
-    data[27] = crc>>8;
-
-
-    myserial->myserialport_sendData(data,sizeof(data));
 
     delay(20);
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
@@ -840,36 +836,20 @@ void MainWindow::device_capacity_set(void)
     quint8  read_data[100] = {0};
 
     bool ok = false;
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
-        return;
-    }
-    data[1] = cmd;
-    data[2] = set_reg_addr>>8;
-    data[3] = set_reg_addr&0xff;
-    data[4] = set_reg_num>>8;
-    data[5] = set_reg_num&0xff;
-
-    uint16_t value = 0;
-    ok = false;
-    str_id = ui->lEdit_capacity_set->text();
+    quint16 value = 0;
+    QString str_id = ui->lEdit_capacity_set->text();
     value = (quint16)str_id.toUInt(&ok,10);
     if(ok){
-        data[6] =  value>>8;
-        data[7] =  value&0xFF;
+        data[0] =  value>>8;
+        data[1] =  value&0xFF;
     }else{;}
 
-
-    crc = modbus_calculate_crc(data,8);
-    data[8] = crc&0xff;
-    data[9] = crc>>8;
-
-
-    myserial->myserialport_sendData(data,sizeof(data));
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set capacity info] cmd not send!";
+        return;
+    }else{
+        qDebug()<<"[device set capacity info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
+    }
 
     delay(20);
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
@@ -883,39 +863,22 @@ void MainWindow::device_current_set(void)
     // quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
-    bool ok = false;
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
-        return;
-    }
-    data[1] = cmd;
-    data[2] = set_reg_addr>>8;
-    data[3] = set_reg_addr&0xff;
-    data[4] = set_reg_num>>8;
-    data[5] = set_reg_num&0xff;
-
     qint16 value = 0;
-    ok = false;
-    str_id = ui->lEdit_current_set->text();
+    bool ok = false;
+    QString str_id = ui->lEdit_current_set->text();
     value = (qint16)(str_id.toDouble(&ok)*1000);
-    // value = (value>>8)|((value&0xFF)<<8);
     if(ok){
-        memcpy(&data[6],&value,2);
+        memcpy(&data[0],&value,2);
         // data[6] =  value>>8;
         // data[7] =  value&0xFF;
     }else{;}
 
-
-    crc = modbus_calculate_crc(data,8);
-    data[8] = crc&0xff;
-    data[9] = crc>>8;
-
-
-    myserial->myserialport_sendData(data,sizeof(data));
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set current info] cmd not send!";
+        return;
+    }else{
+        qDebug()<<"[device set current info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
+    }
 
     delay(20);
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
@@ -924,39 +887,21 @@ void MainWindow::device_current_set(void)
 void MainWindow::device_balance_set(void)
 {
     quint8 data[10] = {0},cmd = 0x10;
-    quint16 set_reg_addr = 0x0006,set_reg_num = 0x01,crc = 0;
+    quint16 set_reg_addr = 0x0006,set_reg_num = 0x01;
     // quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
-    bool ok = false;
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
+    uint16_t value = (quint16)m_balance_flag;
+    data[0] =  value>>8;
+    data[1] =  value&0xFF;
+
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set balance info] cmd not send!";
         return;
+    }else{
+        qDebug()<<"[device set balance info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
     }
-    data[1] = cmd;
-    data[2] = set_reg_addr>>8;
-    data[3] = set_reg_addr&0xff;
-    data[4] = set_reg_num>>8;
-    data[5] = set_reg_num&0xff;
-
-    uint16_t value = 0;
-    value = (quint16)m_balance_flag;
-    if(ok){
-        data[6] =  value>>8;
-        data[7] =  value&0xFF;
-    }else{;}
-
-
-    crc = modbus_calculate_crc(data,8);
-    data[8] = crc&0xff;
-    data[9] = crc>>8;
-
-
-    myserial->myserialport_sendData(data,sizeof(data));
 
     delay(20);
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
@@ -965,118 +910,135 @@ void MainWindow::device_balance_set(void)
 void MainWindow::device_voltage_calibration_set(void)
 {
     quint8 data[16] = {0},cmd = 0x10;
-    quint16 set_reg_addr = 0x4001,set_reg_num = 0x04,crc = 0;
+    quint16 set_reg_addr = 0x4001,set_reg_num = 0x04;
     // quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
-    bool ok = false;
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
+    QList<QLineEdit *> lineEdit = {ui->lEdit_voltage_range_calib,ui->lEdit_voltage_zero_calib};
+    for(int i=0; i<lineEdit.size(); i++){
+        u8_float_t u8_f_data;
+        bool ok = false;
+        QString str_id = lineEdit[i]->text();
+        u8_f_data.f_data = str_id.toFloat(&ok);
+        if(!ok){
+            u8_f_data.f_data = 1.0;
+        }else{;}
+        data[4*i]   = u8_f_data.u8_data[3];
+        data[4*i+1] = u8_f_data.u8_data[2];
+        data[4*i+2] = u8_f_data.u8_data[1];
+        data[4*i+3] = u8_f_data.u8_data[0];
+    }
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set voltage calibration info] cmd not send!";
         return;
-    }
-    data[1] = cmd;
-    data[2] = set_reg_addr>>8;
-    data[3] = set_reg_addr&0xff;
-    data[4] = set_reg_num>>8;
-    data[5] = set_reg_num&0xff;
-
-    u8_float_t voltage_range,voltage_zero;
-    ok = false;
-    str_id = ui->lEdit_voltage_range_calib->text();
-    voltage_range.f_data = str_id.toFloat(&ok);
-    if(ok){
-
     }else{
-        voltage_range.f_data = 1.0;
+        qDebug()<<"[device set voltage calibration info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
     }
-    ok = false;
-    str_id = ui->lEdit_voltage_zero_calib->text();
-    voltage_zero.f_data = str_id.toFloat(&ok);
-    if(ok){
-
-    }else{
-        voltage_zero.f_data = 1.0;
-    }
-    data[6] =  voltage_zero.u8_data[3];
-    data[7] =  voltage_zero.u8_data[2];
-    data[8] =  voltage_zero.u8_data[1];
-    data[9] =  voltage_zero.u8_data[0];
-
-    data[10] =  voltage_range.u8_data[3];
-    data[11] =  voltage_range.u8_data[2];
-    data[12] =  voltage_range.u8_data[1];
-    data[13] =  voltage_range.u8_data[0];
-
-    crc = modbus_calculate_crc(data,14);
-    data[14] = crc&0xff;
-    data[15] = crc>>8;
-
-
-    myserial->myserialport_sendData(data,sizeof(data));
 
     delay(20);
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
 }
 
-void MainWindow::device_co_calibration_set(void)
+
+void MainWindow::device_ntc_calibration_set(void)
 {
     quint8 data[16] = {0},cmd = 0x10;
-    quint16 set_reg_addr = 0x4005,set_reg_num = 0x04,crc = 0;
+    quint16 set_reg_addr = 0x401D,set_reg_num = 0x04;
     // quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
-    bool ok = false;
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
+    QList<QLineEdit *> lineEdit = {ui->lEdit_ntc_temp_k_calib,ui->lEdit_ntc_temp_b_calib};
+    for(int i=0; i<lineEdit.size(); i++){
+        u8_float_t u8_f_data;
+        bool ok = false;
+        QString str_id = lineEdit[i]->text();
+        u8_f_data.f_data = str_id.toFloat(&ok);
+        if(!ok){
+            u8_f_data.f_data = 1.0;
+        }else{;}
+        data[4*i]   = u8_f_data.u8_data[3];
+        data[4*i+1] = u8_f_data.u8_data[2];
+        data[4*i+2] = u8_f_data.u8_data[1];
+        data[4*i+3] = u8_f_data.u8_data[0];
+    }
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set ntc calibration info] cmd not send!";
         return;
-    }
-    data[1] = cmd;
-    data[2] = set_reg_addr>>8;
-    data[3] = set_reg_addr&0xff;
-    data[4] = set_reg_num>>8;
-    data[5] = set_reg_num&0xff;
-
-    u8_float_t co_k,co_b;
-    ok = false;
-    str_id = ui->lEdit_co_k_calib_set->text();
-    co_k.f_data = str_id.toFloat(&ok);
-    if(ok){
-
     }else{
-        co_k.f_data = 1.0;
+        qDebug()<<"[device set ntc calibration info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
     }
-    ok = false;
-    str_id = ui->lEdit_co_b_calib_set->text();
-    co_b.f_data = str_id.toFloat(&ok);
-    if(ok){
 
+    delay(20);
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+}
+
+void MainWindow::device_env_calibration_set(void)
+{
+    quint8 data[16] = {0},cmd = 0x10;
+    quint16 set_reg_addr = 0x4021,set_reg_num = 0x08;
+    // quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+    QList<QLineEdit *> lineEdit = {ui->lEdit_env_temp_k_calib,ui->lEdit_env_temp_b_calib,
+                                   ui->lEdit_env_hum_k_calib,ui->lEdit_env_hum_b_calib};
+    for(int i=0; i<lineEdit.size(); i++){
+        u8_float_t u8_f_data;
+        bool ok = false;
+        QString str_id = lineEdit[i]->text();
+        u8_f_data.f_data = str_id.toFloat(&ok);
+        if(!ok){
+            u8_f_data.f_data = 1.0;
+        }else{;}
+        data[4*i]   = u8_f_data.u8_data[3];
+        data[4*i+1] = u8_f_data.u8_data[2];
+        data[4*i+2] = u8_f_data.u8_data[1];
+        data[4*i+3] = u8_f_data.u8_data[0];
+    }
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set env calibration info] cmd not send!";
+        return;
     }else{
-        co_b.f_data = 1.0;
+        qDebug()<<"[device set env calibration info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
     }
-    data[6] =  co_k.u8_data[3];
-    data[7] =  co_k.u8_data[2];
-    data[8] =  co_k.u8_data[1];
-    data[9] =  co_k.u8_data[0];
 
-    data[10] =  co_b.u8_data[3];
-    data[11] =  co_b.u8_data[2];
-    data[12] =  co_b.u8_data[1];
-    data[13] =  co_b.u8_data[0];
-
-    crc = modbus_calculate_crc(data,14);
-    data[14] = crc&0xff;
-    data[15] = crc>>8;
+    delay(20);
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+}
 
 
-    myserial->myserialport_sendData(data,sizeof(data));
+void MainWindow::device_co_calibration_set(void)
+{
+    quint8 data[24] = {0},cmd = 0x10;
+    quint16 set_reg_addr = 0x4005,set_reg_num = 0x0c,crc = 0;
+    // quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+
+    QList<QLineEdit *> lineEdit = {ui->lEdit_co_k1_calib,ui->lEdit_co_k2_calib,ui->lEdit_co_k3_calib,
+                                    ui->lEdit_co_b1_calib,ui->lEdit_co_b2_calib,ui->lEdit_co_b3_calib};
+    for(int i=0; i<lineEdit.size();i++){
+        u8_float_t u8_f_data;
+        bool ok = false;
+        QString str_id = lineEdit[i]->text();
+        u8_f_data.f_data = str_id.toFloat(&ok);
+        if(!ok){
+            u8_f_data.f_data = 1.0;
+        }else{;}
+        data[4*i]   = u8_f_data.u8_data[3];
+        data[4*i+1] = u8_f_data.u8_data[2];
+        data[4*i+2] = u8_f_data.u8_data[1];
+        data[4*i+3] = u8_f_data.u8_data[0];
+    }
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set CO calibration info] cmd not send!";
+        return;
+    }else{
+        qDebug()<<"[device set CO calibration info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
+    }
 
     delay(20);
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
@@ -1089,49 +1051,203 @@ void MainWindow::device_h2_calibration_set(void)
     // quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
-    bool ok = false;
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
+    QList<QLineEdit *> lineEdit = { ui->lEdit_h2_k1,ui->lEdit_h2_k2,
+                                    ui->lEdit_h2_k3,ui->lEdit_h2_b1,
+                                    ui->lEdit_h2_b2,ui->lEdit_h2_b3};
+    for(int i=0; i<lineEdit.size();i++){
+        u8_float_t u8_f_data;
+        bool ok = false;
+        QString str_id = lineEdit[i]->text();
+        u8_f_data.f_data = str_id.toFloat(&ok);
+        if(!ok){
+            u8_f_data.f_data = 1.0;
+        }else{;}
+        data[4*i]   = u8_f_data.u8_data[3];
+        data[4*i+1] = u8_f_data.u8_data[2];
+        data[4*i+2] = u8_f_data.u8_data[1];
+        data[4*i+3] = u8_f_data.u8_data[0];
+    }
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set H2 calibration info] cmd not send!";
         return;
+    }else{
+        qDebug()<<"[device set H2 calibration info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
     }
-    data[1] = cmd;
-    data[2] = set_reg_addr>>8;
-    data[3] = set_reg_addr&0xff;
-    data[4] = set_reg_num>>8;
-    data[5] = set_reg_num&0xff;
-
-    u8_float_t h2_k,h2_b,h2_a1,h2_a2,h2_a3,h2_a4;
-    u8_float_t h2[6];
-    QList<QLineEdit *> lineEdit = { ui->lEdit_h2_k_calib_set,ui->lEdit_h2_b_calib_set,
-                                    ui->lEdit_h2_a1_calib_set,ui->lEdit_h2_a2_calib_set,
-                                    ui->lEdit_h2_a3_calib_set,ui->lEdit_h2_a4_calib_set};
-    for(int i=0;i<6;i++){
-        ok = false;
-        str_id = lineEdit[i]->text();
-        h2[i].f_data = str_id.toFloat(&ok);
-        if(ok){;}else{
-            h2[i].f_data = 1.0;
-        }
-        data[6+(4*i+0)] =  h2[i].u8_data[3];
-        data[6+(4*i+1)] =  h2[i].u8_data[2];
-        data[6+(4*i+2)] =  h2[i].u8_data[1];
-        data[6+(4*i+3)] =  h2[i].u8_data[0];
-    }
-
-    crc = modbus_calculate_crc(data,30);
-    data[30] = crc&0xff;
-    data[31] = crc>>8;
-
-
-    myserial->myserialport_sendData(data,sizeof(data));
 
     delay(20);
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
 }
+
+void MainWindow::device_h2_map_set(void)
+{
+    quint8 data[100] = {0},cmd = 0x10;
+    quint16 set_reg_addr = 0x402D,set_reg_num = 0x14;
+    // quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+    QList<QLineEdit *> lineEdit = { ui->lEdit_h2_ref1_set,ui->lEdit_h2_ref2_set,ui->lEdit_h2_ref3_set,ui->lEdit_h2_ref4_set,ui->lEdit_h2_ref5_set,
+                                    ui->lEdit_h2_real1_set,ui->lEdit_h2_real2_set,ui->lEdit_h2_real3_set,ui->lEdit_h2_real4_set,ui->lEdit_h2_real5_set};
+    for(int i=0; i<lineEdit.size();i++){
+        u8_float_t u8_f_data;
+        bool ok = false;
+        QString str_id = lineEdit[i]->text();
+        u8_f_data.f_data = str_id.toFloat(&ok);
+        if(!ok){
+            u8_f_data.f_data = 1.0;
+        }else{;}
+        data[4*i]   = u8_f_data.u8_data[3];
+        data[4*i+1] = u8_f_data.u8_data[2];
+        data[4*i+2] = u8_f_data.u8_data[1];
+        data[4*i+3] = u8_f_data.u8_data[0];
+    }
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set H2 map info] cmd not send!";
+        return;
+    }else{
+        qDebug()<<"[device set H2 map info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
+    }
+
+    delay(20);
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+}
+
+void MainWindow::device_h2_K_set(void)
+{
+    quint8 data[32] = {0},cmd = 0x10;
+    quint16 set_reg_addr = 0x4041,set_reg_num = 0x02;
+    // quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+    QList<QLineEdit *> lineEdit = { ui->lEdit_h2_k};
+    for(int i=0; i<lineEdit.size();i++){
+        u8_float_t u8_f_data;
+        bool ok = false;
+        QString str_id = lineEdit[i]->text();
+        u8_f_data.f_data = str_id.toFloat(&ok);
+        if(!ok){
+            u8_f_data.f_data = 1.0;
+        }else{;}
+        data[4*i]   = u8_f_data.u8_data[3];
+        data[4*i+1] = u8_f_data.u8_data[2];
+        data[4*i+2] = u8_f_data.u8_data[1];
+        data[4*i+3] = u8_f_data.u8_data[0];
+    }
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set H2 K info] cmd not send!";
+        return;
+    }else{
+        qDebug()<<"[device set H2 K info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
+    }
+
+    delay(20);
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+}
+
+void MainWindow::device_h2_ref_zero_set(void)
+{
+    quint8 data[32] = {0},cmd = 0x10;
+    quint16 set_reg_addr = 0x4029,set_reg_num = 0x04;
+    // quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+    QList<QLineEdit *> lineEdit = { ui->lEdit_h2_ref_temp_set,ui->lEdit_h2_ref_hum_set};
+    for(int i=0; i<lineEdit.size();i++){
+        u8_float_t u8_f_data;
+        bool ok = false;
+        QString str_id = lineEdit[i]->text();
+        u8_f_data.f_data = str_id.toFloat(&ok);
+        if(!ok){
+            u8_f_data.f_data = 1.0;
+        }else{;}
+        data[4*i]   = u8_f_data.u8_data[3];
+        data[4*i+1] = u8_f_data.u8_data[2];
+        data[4*i+2] = u8_f_data.u8_data[1];
+        data[4*i+3] = u8_f_data.u8_data[0];
+    }
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set H2 K info] cmd not send!";
+        return;
+    }else{
+        qDebug()<<"[device set H2 K info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
+    }
+
+    delay(20);
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+}
+
+void MainWindow::device_h2_ref_one_set(void)
+{
+    quint8 data[32] = {0},cmd = 0x10;
+    quint16 set_reg_addr = 0x402D,set_reg_num = 0x02;
+    // quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+    bool ok = false;
+    QString str_id = ui->lEdit_h2_ref_num_set->text();
+    quint8 reg_num = 0;
+    reg_num = str_id.toUInt(&ok);
+    if(!ok) return;
+    if(reg_num > 5 || reg_num == 0) reg_num = 1;
+    set_reg_addr += 2*(reg_num-1);
+
+
+    QList<QLineEdit *> lineEdit = { ui->lEdit_h2_ref_one_set};
+    for(int i=0; i<lineEdit.size();i++){
+        u8_float_t u8_f_data;
+        ok = false;
+        str_id = lineEdit[i]->text();
+        u8_f_data.f_data = str_id.toFloat(&ok);
+        if(!ok){
+            u8_f_data.f_data = 1.0;
+        }else{;}
+        data[4*i]   = u8_f_data.u8_data[3];
+        data[4*i+1] = u8_f_data.u8_data[2];
+        data[4*i+2] = u8_f_data.u8_data[1];
+        data[4*i+3] = u8_f_data.u8_data[0];
+    }
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set H2 K info] cmd not send!";
+        return;
+    }else{
+        qDebug()<<"[device set H2 K info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
+    }
+
+    delay(20);
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+}
+
+void MainWindow::device_h2_ref_auto_open_set(bool status)
+{
+    quint8 data[32] = {0},cmd = 0x10;
+    quint16 set_reg_addr = 0x4059,set_reg_num = 0x01;
+    // quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+    if(status){
+        data[0] = 0;
+        data[1] = 1;
+    }else{
+        data[0] = 0;
+        data[1] = 0;
+    }
+
+    if(!device_reg_data_write(set_reg_addr,set_reg_num,cmd,data)){
+        qDebug()<<"[device set H2 K info] cmd not send!";
+        return;
+    }else{
+        qDebug()<<"[device set H2 K info]"<<"reg_addr = "<<Qt::hex<<set_reg_addr<<"reg_num = "<<set_reg_num;
+    }
+
+    delay(20);
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+}
+
+
 
 void MainWindow::run_process_set_param_handler(void)
 {
@@ -1165,6 +1281,16 @@ void MainWindow::run_process_set_param_handler(void)
         m_param_event &= ~PARAM_EVENT_SET_VOLTAGE_CALIB;
     }
 
+    if(m_param_event&PARAM_EVENT_SET_NTC_CALIB){
+        device_ntc_calibration_set();
+        m_param_event &= ~PARAM_EVENT_SET_NTC_CALIB;
+    }
+
+    if(m_param_event&PARAM_EVENT_SET_ENV_CALIB){
+        device_env_calibration_set();
+        m_param_event &= ~PARAM_EVENT_SET_ENV_CALIB;
+    }
+
     if(m_param_event&PARAM_EVENT_SET_CO_CALIB){
         device_co_calibration_set();
         m_param_event &= ~PARAM_EVENT_SET_CO_CALIB;
@@ -1174,61 +1300,308 @@ void MainWindow::run_process_set_param_handler(void)
         device_h2_calibration_set();
         m_param_event &= ~PARAM_EVENT_SET_H2_CALIB;
     }
+
+    if(m_param_event&PARAM_EVENT_SET_H2_REF){
+        device_h2_map_set();
+        m_param_event &= ~PARAM_EVENT_SET_H2_REF;
+    }else{;}
+
+    if(m_param_event&PARAM_EVENT_SET_H2_K){
+        device_h2_K_set();
+        m_param_event &= ~PARAM_EVENT_SET_H2_K;
+    }else{;}
+
+    if(m_param_event&PARAM_EVENT_SET_H2_REF_ONE){
+        device_h2_ref_one_set();
+        m_param_event &= ~PARAM_EVENT_SET_H2_REF_ONE;
+    }else{;}
+
+    if(m_param_event&PARAM_EVENT_SET_H2_REF_ZERO){
+        device_h2_ref_zero_set();
+        m_param_event &= ~PARAM_EVENT_SET_H2_REF_ZERO;
+    }else{;}
+
+    if(m_param_event&PARAM_EVENT_SET_H2_AUTO_OPEN){
+        device_h2_ref_auto_open_set(autoOpenFlag);
+        m_param_event &= ~PARAM_EVENT_SET_H2_AUTO_OPEN;
+    }else{;}
 }
 
-void MainWindow::run_process_get_param_handler(void)
+void MainWindow::device_voltage_calibration_get(void)
 {
-    quint8 data[8] = {0},cmd = 0x03;
-    quint16 read_reg_addr = 0x4000,read_reg_num = 0x1D,crc = 0;
+    quint8  cmd = 0x03,id = 0x00;
+    quint16 read_reg_addr = 0x4001,read_reg_num = 0x04;
     quint16 read_bytes = 0;
     quint8  read_data[100] = {0};
 
     while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
 
-    QString str_id = ui->cbox_modbus_addr->currentText();
-    bool ok = false;
-    quint8 id = (quint8)str_id.toUInt(&ok,10);
-    if(ok){
-        data[0] = id;
-    }else{
-        qDebug()<<"modbus 地址转换失败";
+    if(!(id = device_id_get())){
+        qDebug()<<"[device read voltage calibration info] cmd not send!";
         return;
-    }
-    data[1] = cmd;
-    data[2] = read_reg_addr>>8;
-    data[3] = read_reg_addr&0xff;
-    data[4] = read_reg_num>>8;
-    data[5] = read_reg_num&0xff;
-    crc = modbus_calculate_crc(data,6);
-    data[6] = crc&0xff;
-    data[7] = crc>>8;
+    }else{;}
 
-
-    myserial->myserialport_sendData(data,sizeof(data));
+    device_reg_data_read(read_reg_addr,read_reg_num,cmd,id);
+    qDebug()<<"[device read voltage calibration info]"<<"reg_addr = "<<Qt::hex<<read_reg_addr<<"reg_num = "<<read_reg_num;
 
     delay(100);
 
     read_bytes = myserial->myserialport_receiveData(read_data,sizeof(read_data));
     if(read_bytes > 0){
         if(read_data[0] == id && read_data[1] == cmd && (read_data[2]<<8|read_data[3]) == read_reg_num*2){
-            u8_float_t calibretion[14];
-            QList<QLineEdit *> lineEdit = { ui->lEdit_voltage_zero,ui->lEdit_voltage_range,ui->lEdit_co_k_calib,ui->lEdit_co_b_calib,
-                                            ui->lEdit_co_a1_calib,ui->lEdit_co_a2_calib,ui->lEdit_co_a3_calib,ui->lEdit_co_a4_calib,
-                                            ui->lEdit_h2_k_calib,ui->lEdit_h2_b_calib,ui->lEdit_h2_a1_calib,ui->lEdit_h2_a2_calib,
-                                            ui->lEdit_h2_a3_calib,ui->lEdit_h2_a4_calib};
-            for(int i=0;i<14;i++){
-                calibretion[i].u8_data[0] = read_data[6+4*i+3];
-                calibretion[i].u8_data[1] = read_data[6+4*i+2];
-                calibretion[i].u8_data[2] = read_data[6+4*i+1];
-                calibretion[i].u8_data[3] = read_data[6+4*i+0];
+            u8_float_t calibretion[6];
+            QList<QLineEdit *> lineEdit = {ui->lEdit_voltage_zero,ui->lEdit_voltage_range};
+            for(int i=0;i<lineEdit.size();i++){
+                calibretion[i].u8_data[0] = read_data[4+4*i+3];
+                calibretion[i].u8_data[1] = read_data[4+4*i+2];
+                calibretion[i].u8_data[2] = read_data[4+4*i+1];
+                calibretion[i].u8_data[3] = read_data[4+4*i+0];
                 lineEdit[i]->setText(QString::number(calibretion[i].f_data,'f',7));
             }
         }else{
-            qDebug()<<"info msg error";
+            qDebug()<<"read param info check error!";
         }
     }else{
-        qDebug()<<"设备未应答";
+        qDebug()<<"device not respond!";
     }
+}
+
+void MainWindow::device_ntc_calibration_get(void)
+{
+    quint8  cmd = 0x03,id = 0x00;
+    quint16 read_reg_addr = 0x401D,read_reg_num = 0x04;
+    quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+
+    if(!(id = device_id_get())){
+        qDebug()<<"[device read battery ntc calibration info] cmd not send!";
+        return;
+    }else{;}
+
+    device_reg_data_read(read_reg_addr,read_reg_num,cmd,id);
+    qDebug()<<"[device read battery ntc calibration info]"<<"reg_addr = "<<Qt::hex<<read_reg_addr<<"reg_num = "<<read_reg_num;
+
+    delay(100);
+
+    read_bytes = myserial->myserialport_receiveData(read_data,sizeof(read_data));
+    if(read_bytes > 0){
+        if(read_data[0] == id && read_data[1] == cmd && (read_data[2]<<8|read_data[3]) == read_reg_num*2){
+            u8_float_t calibretion[6];
+            QList<QLineEdit *> lineEdit = {ui->lEdit_ntc_temp_k,ui->lEdit_ntc_temp_b};
+            for(int i=0;i<lineEdit.size();i++){
+                calibretion[i].u8_data[0] = read_data[4+4*i+3];
+                calibretion[i].u8_data[1] = read_data[4+4*i+2];
+                calibretion[i].u8_data[2] = read_data[4+4*i+1];
+                calibretion[i].u8_data[3] = read_data[4+4*i+0];
+                lineEdit[i]->setText(QString::number(calibretion[i].f_data,'f',7));
+            }
+        }else{
+            qDebug()<<"read param info check error!";
+        }
+    }else{
+        qDebug()<<"device not respond!";
+    }
+}
+
+void MainWindow::device_env_calibration_get(void)
+{
+    quint8  cmd = 0x03,id = 0x00;
+    quint16 read_reg_addr = 0x4021,read_reg_num = 0x08;
+    quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+
+    if(!(id = device_id_get())){
+        qDebug()<<"[device read env calibration info] cmd not send!";
+        return;
+    }else{;}
+
+    device_reg_data_read(read_reg_addr,read_reg_num,cmd,id);
+    qDebug()<<"[device read env calibration info]"<<"reg_addr = "<<Qt::hex<<read_reg_addr<<"reg_num = "<<read_reg_num;
+
+    delay(100);
+
+    read_bytes = myserial->myserialport_receiveData(read_data,sizeof(read_data));
+    if(read_bytes > 0){
+        if(read_data[0] == id && read_data[1] == cmd && (read_data[2]<<8|read_data[3]) == read_reg_num*2){
+            u8_float_t calibretion[6];
+            QList<QLineEdit *> lineEdit = {ui->lEdit_env_temp_k,ui->lEdit_env_temp_b,
+                                           ui->lEdit_env_hum_k,ui->lEdit_env_hum_b};
+            for(int i=0;i<lineEdit.size();i++){
+                calibretion[i].u8_data[0] = read_data[4+4*i+3];
+                calibretion[i].u8_data[1] = read_data[4+4*i+2];
+                calibretion[i].u8_data[2] = read_data[4+4*i+1];
+                calibretion[i].u8_data[3] = read_data[4+4*i+0];
+                lineEdit[i]->setText(QString::number(calibretion[i].f_data,'f',7));
+            }
+        }else{
+            qDebug()<<"read param info check error!";
+        }
+    }else{
+        qDebug()<<"device not respond!";
+    }
+}
+
+void MainWindow::device_co_calibration_get(void)
+{
+    quint8  cmd = 0x03,id = 0x00;
+    quint16 read_reg_addr = 0x4005,read_reg_num = 0x0c;
+    quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+
+    if(!(id = device_id_get())){
+        qDebug()<<"[device read CO calibration info] cmd not send!";
+        return;
+    }else{;}
+
+    device_reg_data_read(read_reg_addr,read_reg_num,cmd,id);
+    qDebug()<<"[device read CO calibration info]"<<"reg_addr = "<<Qt::hex<<read_reg_addr<<"reg_num = "<<read_reg_num;
+
+    delay(100);
+
+    read_bytes = myserial->myserialport_receiveData(read_data,sizeof(read_data));
+    if(read_bytes > 0){
+        if(read_data[0] == id && read_data[1] == cmd && (read_data[2]<<8|read_data[3]) == read_reg_num*2){
+            u8_float_t calibretion[6];
+            QList<QLineEdit *> lineEdit = {ui->lEdit_co_k1,ui->lEdit_co_k2,
+                                           ui->lEdit_co_k3,ui->lEdit_co_b1,
+                                           ui->lEdit_co_b2,ui->lEdit_co_b3};
+            for(int i=0;i<lineEdit.size();i++){
+                calibretion[i].u8_data[0] = read_data[4+4*i+3];
+                calibretion[i].u8_data[1] = read_data[4+4*i+2];
+                calibretion[i].u8_data[2] = read_data[4+4*i+1];
+                calibretion[i].u8_data[3] = read_data[4+4*i+0];
+                lineEdit[i]->setText(QString::number(calibretion[i].f_data,'f',7));
+            }
+        }else{
+            qDebug()<<"read param info check error!";
+        }
+    }else{
+        qDebug()<<"device not respond!";
+    }
+}
+
+void MainWindow::device_h2_calibration_get(void)
+{
+    quint8  cmd = 0x03,id = 0x00;
+    quint16 read_reg_addr = 0x4011,read_reg_num = 0x0c;
+    quint16 read_bytes = 0;
+    quint8  read_data[100] = {0};
+
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+
+    if(!(id = device_id_get())){
+        qDebug()<<"[device read param info] cmd not send!";
+        return;
+    }else{;}
+
+    device_reg_data_read(read_reg_addr,read_reg_num,cmd,id);
+    qDebug()<<"[device read param info]"<<"reg_addr = "<<Qt::hex<<read_reg_addr<<"reg_num = "<<read_reg_num;
+
+    delay(100);
+
+    read_bytes = myserial->myserialport_receiveData(read_data,sizeof(read_data));
+    if(read_bytes > 0){
+        if(read_data[0] == id && read_data[1] == cmd && (read_data[2]<<8|read_data[3]) == read_reg_num*2){
+            u8_float_t calibretion[6];
+            QList<QLineEdit *> lineEdit = {ui->lEdit_h2_k1,ui->lEdit_h2_k2,
+                                           ui->lEdit_h2_k3,ui->lEdit_h2_b1,
+                                           ui->lEdit_h2_b2,ui->lEdit_h2_b3};
+            for(int i=0;i<lineEdit.size();i++){
+                calibretion[i].u8_data[0] = read_data[4+4*i+3];
+                calibretion[i].u8_data[1] = read_data[4+4*i+2];
+                calibretion[i].u8_data[2] = read_data[4+4*i+1];
+                calibretion[i].u8_data[3] = read_data[4+4*i+0];
+                lineEdit[i]->setText(QString::number(calibretion[i].f_data,'f',7));
+            }
+        }else{
+            qDebug()<<"read param info check error!";
+        }
+    }else{
+        qDebug()<<"device not respond!";
+    }
+}
+
+void MainWindow::device_h2_ref_get(void)
+{
+    quint8  cmd = 0x03,id = 0x00;
+    quint16 read_reg_addr = 0x4029,read_reg_num = 0x31;
+    quint16 read_bytes = 0;
+    quint8  read_data[200] = {0};
+
+    while(myserial->myserialport_receiveData(read_data,sizeof(read_data)));
+
+    if(!(id = device_id_get())){
+        qDebug()<<"[device read h2 ref info] cmd not send!";
+        return;
+    }else{;}
+
+    device_reg_data_read(read_reg_addr,read_reg_num,cmd,id);
+    qDebug()<<"[device read h2 ref info]"<<"reg_addr = "<<Qt::hex<<read_reg_addr<<"reg_num = "<<read_reg_num;
+
+    delay(500);
+
+    read_bytes = myserial->myserialport_receiveData(read_data,sizeof(read_data));
+    if(read_bytes > 0){
+        if(read_data[0] == id && read_data[1] == cmd && (read_data[2]<<8|read_data[3]) == read_reg_num*2){
+            u8_float_t calibretion[6];
+            QList<QLineEdit *> lineEdit = { ui->lEdit_h2_ref_temp_set,ui->lEdit_h2_ref_hum_set,
+                                            ui->lEdit_h2_ref1_set,ui->lEdit_h2_ref2_set,ui->lEdit_h2_ref3_set,ui->lEdit_h2_ref4_set,ui->lEdit_h2_ref5_set,
+                                            ui->lEdit_h2_real1_set,ui->lEdit_h2_real2_set,ui->lEdit_h2_real3_set,ui->lEdit_h2_real4_set,ui->lEdit_h2_real5_set,
+                                            ui->lEdit_h2_temp1_set,ui->lEdit_h2_temp2_set,ui->lEdit_h2_temp3_set,ui->lEdit_h2_temp4_set,ui->lEdit_h2_temp5_set,
+                                            ui->lEdit_h2_hum1_set,ui->lEdit_h2_hum2_set,ui->lEdit_h2_hum3_set,ui->lEdit_h2_hum4_set,ui->lEdit_h2_hum5_set,
+                                            ui->lEdit_h2_k,ui->lEdit_h2_b,ui->lEdit_auto_open};
+            for(int i=0;i<lineEdit.size();i++){
+                if(i < (lineEdit.size()-1)){
+                    calibretion[i].u8_data[0] = read_data[4+4*i+3];
+                    calibretion[i].u8_data[1] = read_data[4+4*i+2];
+                    calibretion[i].u8_data[2] = read_data[4+4*i+1];
+                    calibretion[i].u8_data[3] = read_data[4+4*i+0];
+                    lineEdit[i]->setText(QString::number(calibretion[i].f_data,'f',7));
+                }else{
+                    lineEdit[i]->setText(QString::number((read_data[4+4*(i-1)+4]<<8)|(read_data[4+4*(i-1)+5])));
+                }
+            }
+        }else{
+            qDebug()<<"read h2 ref info check error!";
+        }
+    }else{
+        qDebug()<<"device not respond!";
+    }
+}
+
+void MainWindow::run_process_get_param_handler(void)
+{
+    if(m_get_param_event&PARAM_EVENT_GET_VOLTAGE_CALIB){
+        device_voltage_calibration_get();
+        m_get_param_event &= ~PARAM_EVENT_GET_VOLTAGE_CALIB;
+    }else{;}
+    if(m_get_param_event&PARAM_EVENT_GET_NTC_CALIB){
+        device_ntc_calibration_get();
+        m_get_param_event &= ~PARAM_EVENT_GET_NTC_CALIB;
+    }else{;}
+    if(m_get_param_event&PARAM_EVENT_GET_ENV_CALIB){
+        device_env_calibration_get();
+        m_get_param_event &= ~PARAM_EVENT_GET_ENV_CALIB;
+    }else{;}
+    if(m_get_param_event&PARAM_EVENT_GET_CO_CALIB){
+        device_co_calibration_get();
+        m_get_param_event &= ~PARAM_EVENT_GET_CO_CALIB;
+    }else{;}
+    if(m_get_param_event&PARAM_EVENT_GET_H2_CALIB){
+        device_h2_calibration_get();
+        m_get_param_event &= ~PARAM_EVENT_GET_H2_CALIB;
+    }else{;}
+
+    if(m_get_param_event&PARAM_EVENT_GET_H2_REF){
+        device_h2_ref_get();
+        m_get_param_event &= ~PARAM_EVENT_GET_H2_REF;
+    }else{;}
 }
 
 
@@ -1335,18 +1708,56 @@ void MainWindow::on_btn_balanced_clicked()
     m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
 }
 
+void MainWindow::on_btn_voltage_calib_get_clicked()
+{
+    m_get_param_event |= PARAM_EVENT_GET_VOLTAGE_CALIB;
+    m_run_event |= PROJECT_EVENT_GET_PRAMA_BIT;
+}
+void MainWindow::on_btn_ntc_calib_get_clicked()
+{
+    m_get_param_event |= PARAM_EVENT_GET_NTC_CALIB;
+    m_run_event |= PROJECT_EVENT_GET_PRAMA_BIT;
+}
+
+void MainWindow::on_btn_env_calib_get_clicked()
+{
+    m_get_param_event |= PARAM_EVENT_GET_ENV_CALIB;
+    m_run_event |= PROJECT_EVENT_GET_PRAMA_BIT;
+}
+void MainWindow::on_btn_co_calib_get_clicked()
+{
+    m_get_param_event |= PARAM_EVENT_GET_CO_CALIB;
+    m_run_event |= PROJECT_EVENT_GET_PRAMA_BIT;
+}
+
+void MainWindow::on_btn_h2_calib_get_clicked()
+{
+    m_get_param_event |= PARAM_EVENT_GET_H2_CALIB;
+    m_run_event |= PROJECT_EVENT_GET_PRAMA_BIT;
+}
+
+void MainWindow::on_btn_h2_ref_get_clicked()
+{
+    m_get_param_event |= PARAM_EVENT_GET_H2_REF;
+    m_run_event |= PROJECT_EVENT_GET_PRAMA_BIT;
+}
 
 void MainWindow::on_btn_voltage_calib_set_clicked()
 {
-
     m_param_event |= PARAM_EVENT_SET_VOLTAGE_CALIB;
     m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
 }
 
-
-void MainWindow::on_btn_voltage_calib_get_clicked()
+void MainWindow::on_btn_ntc_calib_set_clicked()
 {
-    m_run_event |= PROJECT_EVENT_GET_PRAMA_BIT;
+    m_param_event |= PARAM_EVENT_SET_NTC_CALIB;
+    m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
+}
+
+void MainWindow::on_btn_env_calib_set_clicked()
+{
+    m_param_event |= PARAM_EVENT_SET_ENV_CALIB;
+    m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
 }
 
 
@@ -1363,9 +1774,123 @@ void MainWindow::on_btn_h2_calib_set_clicked()
     m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
 }
 
-
-void MainWindow::on_openButton_clicked()
+void MainWindow::on_btn_h2_k_set_clicked()
 {
+    m_param_event |= PARAM_EVENT_SET_H2_K;
+    m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
+}
+
+void MainWindow::on_btn_h2_ref_set_clicked()
+{
+    m_param_event |= PARAM_EVENT_SET_H2_REF;
+    m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
+}
+
+
+void MainWindow::on_btn_voltage_calib_clear_clicked()
+{
+    ui->lEdit_voltage_range->clear();
+    ui->lEdit_voltage_zero->clear();
+}
+
+
+void MainWindow::on_btn_ntc_calib_clear_clicked()
+{
+    ui->lEdit_ntc_temp_k->clear();
+    ui->lEdit_ntc_temp_b->clear();
+}
+
+
+void MainWindow::on_btn_env_calib_clear_clicked()
+{
+    ui->lEdit_env_temp_k->clear();
+    ui->lEdit_env_temp_b->clear();
+    ui->lEdit_env_hum_k->clear();
+    ui->lEdit_env_hum_b->clear();
+}
+
+
+void MainWindow::on_btn_co_calib_clear_clicked()
+{
+    ui->lEdit_co_k1->clear();
+    ui->lEdit_co_k2->clear();
+    ui->lEdit_co_k3->clear();
+    ui->lEdit_co_b1->clear();
+    ui->lEdit_co_b2->clear();
+    ui->lEdit_co_b3->clear();
 
 }
+
+
+void MainWindow::on_btn_h2_calib_clear_clicked()
+{
+    ui->lEdit_h2_k1->clear();
+    ui->lEdit_h2_k2->clear();
+    ui->lEdit_h2_k3->clear();
+    ui->lEdit_h2_b1->clear();
+    ui->lEdit_h2_b2->clear();
+    ui->lEdit_h2_b3->clear();
+}
+
+
+void MainWindow::on_btn_h2_ref_clear_clicked()
+{
+    QList<QLineEdit *> lineEdit = { ui->lEdit_h2_ref1_set,ui->lEdit_h2_ref2_set,ui->lEdit_h2_ref3_set,ui->lEdit_h2_ref4_set,ui->lEdit_h2_ref5_set,
+                                    ui->lEdit_h2_real1_set,ui->lEdit_h2_real2_set,ui->lEdit_h2_real3_set,ui->lEdit_h2_real4_set,ui->lEdit_h2_real5_set,
+                                    ui->lEdit_h2_temp1_set,ui->lEdit_h2_temp2_set,ui->lEdit_h2_temp3_set,ui->lEdit_h2_temp4_set,ui->lEdit_h2_temp5_set,
+                                    ui->lEdit_h2_hum1_set,ui->lEdit_h2_hum2_set,ui->lEdit_h2_hum3_set,ui->lEdit_h2_hum4_set,ui->lEdit_h2_hum5_set,
+                                    ui->lEdit_h2_k,ui->lEdit_h2_b,ui->lEdit_h2_ref_hum_set,ui->lEdit_h2_ref_temp_set};
+    for(int i=0; i<lineEdit.size();i++){
+        lineEdit[i]->clear();
+    }
+}
+
+
+
+
+
+void MainWindow::on_btn_h2_set_start_clicked()
+{
+    // if( ui->btn_h2_ref_one_set->isEnabled()){
+    //     ui->btn_h2_ref_one_set->setDisabled(false);
+    // }
+    ui->btn_h2_ref_set->setDisabled(true);
+    ui->btn_h2_ref_one_set->setDisabled(false);
+    autoOpenFlag = true;
+    m_param_event |= PARAM_EVENT_SET_H2_AUTO_OPEN;
+    m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
+}
+
+void MainWindow::on_btn_h2_set_close_clicked()
+{
+    ui->btn_h2_ref_one_set->setDisabled(true);
+    ui->btn_h2_ref_set->setDisabled(false);
+    autoOpenFlag = false;
+    m_param_event |= PARAM_EVENT_SET_H2_AUTO_OPEN;
+    m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
+}
+
+quint8 click = 0;
+
+void MainWindow::on_btn_h2_ref_one_set_clicked()
+{
+    // click++;
+    // click %= 5;
+    // if(click == 0){
+    //     ui->btn_h2_ref_one_set->setDisabled(true);
+    // }
+
+    m_param_event |= PARAM_EVENT_SET_H2_REF_ONE;
+    m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
+}
+
+
+void MainWindow::on_btn_h2_ref_zero_set_clicked()
+{
+    m_param_event |= PARAM_EVENT_SET_H2_REF_ZERO;
+    m_run_event |= PROJECT_EVENT_SET_PRAMA_BIT;
+}
+
+
+
 

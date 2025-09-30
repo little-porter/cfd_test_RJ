@@ -41,6 +41,7 @@ else()
             ${PROJECT_SOURCES}
             upgrade.h upgrade.cpp
             myserialport.h myserialport.cpp
+            currenttransformer.h currenttransformer.cpp
         )
     endif()
 endif()

@@ -46,8 +46,23 @@ QT_END_NAMESPACE
 
 #define PARAM_EVENT_SET_BALANCE         1<<5
 #define PARAM_EVENT_SET_VOLTAGE_CALIB   1<<6
-#define PARAM_EVENT_SET_CO_CALIB        1<<7
-#define PARAM_EVENT_SET_H2_CALIB        1<<8
+#define PARAM_EVENT_SET_NTC_CALIB       1<<7
+#define PARAM_EVENT_SET_ENV_CALIB       1<<8
+#define PARAM_EVENT_SET_CO_CALIB        1<<9
+#define PARAM_EVENT_SET_H2_CALIB        1<<10
+#define PARAM_EVENT_SET_H2_K            1<<11
+#define PARAM_EVENT_SET_H2_REF          1<<12
+#define PARAM_EVENT_SET_H2_REF_ONE      1<<13
+#define PARAM_EVENT_SET_H2_REF_ZERO     1<<15
+#define PARAM_EVENT_SET_H2_AUTO_OPEN    1<<16
+
+
+#define PARAM_EVENT_GET_VOLTAGE_CALIB   1<<0
+#define PARAM_EVENT_GET_NTC_CALIB       1<<1
+#define PARAM_EVENT_GET_ENV_CALIB       1<<2
+#define PARAM_EVENT_GET_CO_CALIB        1<<3
+#define PARAM_EVENT_GET_H2_CALIB        1<<4
+#define PARAM_EVENT_GET_H2_REF          1<<5
 
 class MainWindow : public QMainWindow
 {
@@ -91,7 +106,43 @@ private slots:
 
     void on_btn_h2_calib_set_clicked();
 
-    void on_openButton_clicked();
+    void on_btn_co_calib_get_clicked();
+
+    void on_btn_ntc_calib_get_clicked();
+
+    void on_btn_env_calib_get_clicked();
+
+    void on_btn_h2_calib_get_clicked();
+
+    void on_btn_ntc_calib_set_clicked();
+
+    void on_btn_env_calib_set_clicked();
+
+    void on_btn_voltage_calib_clear_clicked();
+
+    void on_btn_ntc_calib_clear_clicked();
+
+    void on_btn_env_calib_clear_clicked();
+
+    void on_btn_co_calib_clear_clicked();
+
+    void on_btn_h2_calib_clear_clicked();
+
+    void on_btn_h2_k_set_clicked();
+
+    void on_btn_h2_ref_set_clicked();
+
+    void on_btn_h2_ref_clear_clicked();
+
+    void on_btn_h2_ref_get_clicked();
+
+    void on_btn_h2_set_start_clicked();
+
+    void on_btn_h2_ref_one_set_clicked();
+
+    void on_btn_h2_ref_zero_set_clicked();
+
+    void on_btn_h2_set_close_clicked();
 
 private:
     typedef enum _run_process{
@@ -137,10 +188,29 @@ private:
     void device_capacity_set(void);
     void device_current_set(void);
     void device_balance_set(void);
+
     void device_voltage_calibration_set(void);
+    void device_ntc_calibration_set(void);
+    void device_env_calibration_set(void);
     void device_co_calibration_set(void);
     void device_h2_calibration_set(void);
+    void device_h2_map_set(void);
+    void device_h2_K_set(void);
+    void device_h2_ref_one_set(void);
+    void device_h2_ref_zero_set(void);
+    void device_h2_ref_auto_open_set(bool status);
 
+    void device_voltage_calibration_get(void);
+    void device_ntc_calibration_get(void);
+    void device_env_calibration_get(void);
+    void device_co_calibration_get(void);
+    void device_h2_calibration_get(void);
+
+    void device_h2_ref_get(void);
+
+    quint8 device_id_get(void);
+    bool device_reg_data_read(quint16 reg_addr,quint16 reg_num,quint8 cmd,quint8 id);
+    bool device_reg_data_write(quint16 reg_addr,quint16 reg_num,quint8 cmd,quint8 *payload);
 private:
     Ui::MainWindow *ui;
     QSerialPort    *serialPort;
@@ -156,7 +226,9 @@ private:
     run_process_t   m_run_process;
     project_event_t m_run_event;
     project_event_t m_param_event;
+    project_event_t m_get_param_event;
 
+    bool autoOpenFlag;
     quint8 m_balance_flag;
 };
 #endif // MAINWINDOW_H
